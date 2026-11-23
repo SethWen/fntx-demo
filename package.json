@@ -5,10 +5,12 @@
   "type": "module",
   "scripts": {
     "sync:wasm": "bash scripts/sync-wasm.sh",
+    "prepare": "git config core.hooksPath .githook",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "check": "oxlint && oxfmt --check . && tsc -b",
     "lint:check": "oxlint",
     "lint:fix": "oxlint --fix",
     "fmt:check": "oxfmt --check .",

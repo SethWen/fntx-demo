@@ -5,7 +5,7 @@ import type {
   FontInfoOutput,
   FontSourceConfig,
   TtcInfoOutput,
-} from '../../vendor/fntx-wasm/index';
+} from '@/vendor/fntx-wasm/index';
 import type {
   BuildOutputPayload,
   WorkerRequest,

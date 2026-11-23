@@ -1,4 +1,4 @@
-import type { FontInfoOutput } from '../../../vendor/fntx-wasm/index';
+import type { FontInfoOutput } from '@/vendor/fntx-wasm/index';
 import { translations, type Lang } from '../../i18n/translations';
 import { formatBytes } from '../../lib/format-utils';
 import { FontPreview } from './FontPreview';

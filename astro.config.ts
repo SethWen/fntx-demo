@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
-import tailwindcss from '@tailwindcss/vite';
+import viteConfig from './vite.config.ts';
 
 export default defineConfig({
   site: 'https://fntx.dev',
@@ -13,16 +13,5 @@ export default defineConfig({
       prefixDefaultLocale: false,
     },
   },
-  vite: {
-    plugins: [tailwindcss()],
-    build: {
-      target: 'esnext',
-    },
-    worker: {
-      format: 'es',
-    },
-    optimizeDeps: {
-      exclude: ['@napi-rs/wasm-runtime', '@emnapi/runtime'],
-    },
-  },
+  vite: viteConfig,
 });

@@ -11,7 +11,7 @@ import {
   Upload,
   X,
 } from 'lucide-react';
-import type { FontInfoOutput } from '../../../vendor/fntx-wasm/index';
+import type { FontInfoOutput } from '@/vendor/fntx-wasm/index';
 import { translations, type Lang } from '../../i18n/translations';
 import { fntxClient, type EngineStatus } from '../../lib/fntx-client';
 import { formatBytes } from '../../lib/format-utils';

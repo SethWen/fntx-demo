@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Download, Loader2, Plus, Scissors, Trash2 } from 'lucide-react';
-import type { FontFormat, FontSourceConfig } from '../../../vendor/fntx-wasm/index';
+import type { FontFormat, FontSourceConfig } from '@/vendor/fntx-wasm/index';
 import type { BuildOutputPayload } from '../../workers/fntx.worker';
 import { translations, type Lang } from '../../i18n/translations';
 import { fntxClient } from '../../lib/fntx-client';

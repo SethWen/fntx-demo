@@ -5,15 +5,15 @@ import type {
   FontSourceConfig,
   EngineOptions,
   TtcInfoOutput,
-} from '../../vendor/fntx-wasm/index';
+} from '@/vendor/fntx-wasm/index';
 
-type WasmModule = typeof import('../../vendor/fntx-wasm/fntx.wasip1-browser.js');
+type WasmModule = typeof import('@/vendor/fntx-wasm/fntx.wasip1-browser.js');
 
 let wasmModulePromise: Promise<WasmModule> | null = null;
 
 async function getWasm(): Promise<WasmModule> {
   if (!wasmModulePromise) {
-    wasmModulePromise = import('../../vendor/fntx-wasm/fntx.wasip1-browser.js');
+    wasmModulePromise = import('@/vendor/fntx-wasm/fntx.wasip1-browser.js');
   }
   return wasmModulePromise;
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Download, Loader2, RefreshCw } from 'lucide-react';
-import type { FontFormat } from '../../../vendor/fntx-wasm/index';
+import type { FontFormat } from '@/vendor/fntx-wasm/index';
 import { translations, type Lang } from '../../i18n/translations';
 import { fntxClient } from '../../lib/fntx-client';
 import { downloadBytes, formatBytes, stripExtension } from '../../lib/format-utils';
