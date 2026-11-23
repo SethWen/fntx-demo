@@ -8,10 +8,13 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "lint": "oxlint",
-    "fmt": "oxfmt",
-    "fmt:check": "oxfmt --check",
-    "astro": "astro"
+    "astro": "astro",
+    "lint:check": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "fmt:check": "oxfmt --check .",
+    "fmt:fix": "oxfmt --write .",
+    "fix": "oxlint --fix && oxfmt --write .",
+    "clean": "rm -rf dist coverage playwright-report test-results node_modules/.vite node_modules/.vitest *.tsbuildinfo"
   },
   "dependencies": {
     "@astrojs/react": "^7.1.9",
