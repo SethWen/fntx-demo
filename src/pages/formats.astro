@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AdSlot from '../components/AdSlot.astro';
+---
+
+<BaseLayout
+  lang="zh"
+  currentPath="formats"
+  title="字体格式科普：TTF、WOFF2、OTF、EOT、SVG 与 TTC 区别 - fntx Web"
+  description="详细对比 Web 与桌面常见字体格式（TTF、WOFF2、WOFF、OTF、EOT、SVG、TTC）的压缩率、轮廓曲线与适用场景。"
+>
+  <article class="mx-auto max-w-4xl space-y-6 px-4 py-10 sm:px-6">
+    <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">常见字体格式对比与选型指南</h1>
+    <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+      在网页前端、移动应用与桌面排版中，选择合适的字体格式与子集化策略可以显著降低页面加载体积（中文字库常可从 20MB 压缩至几十 KB）。
+    </p>
+
+    <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/60">
+      <table class="w-full text-left text-xs sm:text-sm">
+        <thead class="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
+          <tr>
+            <th class="px-4 py-3 font-semibold">格式</th>
+            <th class="px-4 py-3 font-semibold">压缩算法</th>
+            <th class="px-4 py-3 font-semibold">典型用途</th>
+            <th class="px-4 py-3 font-semibold">建议</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+          <tr>
+            <td class="px-4 py-3 font-mono font-semibold">WOFF2</td>
+            <td class="px-4 py-3">Brotli + 表预处理</td>
+            <td class="px-4 py-3">现代 Web 首选字体格式</td>
+            <td class="px-4 py-3 text-emerald-600 dark:text-emerald-400">强烈推荐用于网页</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-mono font-semibold">WOFF</td>
+            <td class="px-4 py-3">zlib / DEFLATE</td>
+            <td class="px-4 py-3">兼容老版本浏览器</td>
+            <td class="px-4 py-3">作降级备选</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-mono font-semibold">TTF</td>
+            <td class="px-4 py-3">无（原始 SFNT）</td>
+            <td class="px-4 py-3">系统安装、App 内嵌、源字库</td>
+            <td class="px-4 py-3">桌面/App 通用</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-mono font-semibold">OTF</td>
+            <td class="px-4 py-3">CFF 三次贝塞尔</td>
+            <td class="px-4 py-3">专业印刷排版与设计软件</td>
+            <td class="px-4 py-3">fntx 支持 TTF 无损转 OTF</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-mono font-semibold">TTC</td>
+            <td class="px-4 py-3">多字体表去重共享</td>
+            <td class="px-4 py-3">系统家族字体打包（如宋体/新宋体）</td>
+            <td class="px-4 py-3">可用 TTC 工具拆解提取</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-mono font-semibold">EOT / SVG</td>
+            <td class="px-4 py-3">历史兼容格式</td>
+            <td class="px-4 py-3">极老旧 IE / 早期移动端兼容</td>
+            <td class="px-4 py-3">仅遗留系统需要</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <AdSlot lang="zh" slotId="formats-bottom" />
+  </article>
+</BaseLayout>

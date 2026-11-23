@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  lang="en"
+  currentPath="privacy"
+  title="Privacy Policy - fntx Web"
+  description="Privacy Policy for fntx Web: all font files are processed locally via WebAssembly in your browser and never uploaded."
+>
+  <article class="mx-auto max-w-3xl space-y-5 px-4 py-10 text-sm leading-relaxed text-slate-600 sm:px-6 dark:text-slate-400">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">Privacy Policy</h1>
+    <p>
+      <strong>fntx Web</strong> is a 100% client-side static web application. Your font files and privacy remain strictly under your control:
+    </p>
+    <ul class="list-disc space-y-2 pl-5">
+      <li>
+        <strong>Zero Server Uploads:</strong> Every font file you open is processed exclusively inside your browser's local memory and WebAssembly sandbox. No font data is ever transmitted to our servers or third parties.
+      </li>
+      <li>
+        <strong>Local Preferences:</strong> We only use browser <code>localStorage</code> to remember your language and light/dark theme selection.
+      </li>
+      <li>
+        <strong>Third-Party Advertising (if enabled):</strong> If third-party ad networks such as Google AdSense are enabled, those providers may use cookies in accordance with their own privacy policies to serve relevant ads. You may manage or disable cookies via your browser settings.
+      </li>
+    </ul>
+  </article>
+</BaseLayout>

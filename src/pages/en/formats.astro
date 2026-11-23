@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+---
+
+<BaseLayout
+  lang="en"
+  currentPath="formats"
+  title="Font Formats Explained: TTF, WOFF2, OTF, EOT, SVG & TTC - fntx Web"
+  description="Compare web and desktop font formats (TTF, WOFF2, WOFF, OTF, EOT, SVG, TTC) by compression, outline curves, and best use cases."
+>
+  <article class="mx-auto max-w-4xl space-y-6 px-4 py-10 sm:px-6">
+    <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">Font Formats Comparison & Selection Guide</h1>
+    <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+      Choosing the right font format and subsetting strategy dramatically reduces payload sizes — CJK fonts can often be reduced from 20 MB down to tens of kilobytes.
+    </p>
+
+    <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/60">
+      <table class="w-full text-left text-xs sm:text-sm">
+        <thead class="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
+          <tr>
+            <th class="px-4 py-3 font-semibold">Format</th>
+            <th class="px-4 py-3 font-semibold">Compression</th>
+            <th class="px-4 py-3 font-semibold">Primary Use Case</th>
+            <th class="px-4 py-3 font-semibold">Recommendation</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+          <tr>
+            <td class="px-4 py-3 font-mono font-semibold">WOFF2</td>
+            <td class="px-4 py-3">Brotli + Table Transform</td>
+            <td class="px-4 py-3">Modern Web @font-face</td>
+            <td class="px-4 py-3 text-emerald-600 dark:text-emerald-400">Best for Web</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-mono font-semibold">WOFF</td>
+            <td class="px-4 py-3">zlib / DEFLATE</td>
+            <td class="px-4 py-3">Legacy browser fallback</td>
+            <td class="px-4 py-3">Fallback only</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-mono font-semibold">TTF</td>
+            <td class="px-4 py-3">Uncompressed SFNT</td>
+            <td class="px-4 py-3">Desktop OS, mobile apps, source fonts</td>
+            <td class="px-4 py-3">Universal native format</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-mono font-semibold">OTF</td>
+            <td class="px-4 py-3">CFF Cubic Bézier</td>
+            <td class="px-4 py-3">Print & professional typography</td>
+            <td class="px-4 py-3">fntx converts TTF to OTF</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-mono font-semibold">TTC</td>
+            <td class="px-4 py-3">Shared table container</td>
+            <td class="px-4 py-3">Bundling font families together</td>
+            <td class="px-4 py-3">Unpack/pack with TTC Tools</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-mono font-semibold">EOT / SVG</td>
+            <td class="px-4 py-3">Legacy web formats</td>
+            <td class="px-4 py-3">Old IE / legacy systems</td>
+            <td class="px-4 py-3">Legacy support only</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <AdSlot lang="en" slotId="formats-bottom-en" />
+  </article>
+</BaseLayout>
