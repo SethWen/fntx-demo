@@ -74,7 +74,7 @@ export function FontPreview({ fontBytes, format = 'ttf', lang }: FontPreviewProp
               max={64}
               value={fontSize}
               onChange={(e) => setFontSize(Number(e.target.value))}
-              className="accent-indigo-600"
+              className="accent-violet-600"
             />
           </label>
         )}
@@ -85,7 +85,7 @@ export function FontPreview({ fontBytes, format = 'ttf', lang }: FontPreviewProp
       ) : (
         <>
           {loading && (
-            <p className="mb-2 text-xs text-indigo-600 dark:text-indigo-400">{t.loading}</p>
+            <p className="mb-2 text-xs text-violet-600 dark:text-violet-300">{t.loading}</p>
           )}
           <textarea
             value={sampleText}
@@ -96,7 +96,7 @@ export function FontPreview({ fontBytes, format = 'ttf', lang }: FontPreviewProp
               fontSize: `${fontSize}px`,
               lineHeight: 1.4,
             }}
-            className="w-full rounded-lg border border-slate-200 bg-white p-3 text-slate-900 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+            className="w-full rounded-lg border border-slate-200/80 bg-white/80 p-3 text-slate-900 outline-none focus:border-violet-500 dark:border-violet-400/20 dark:bg-[#0d0b1a]/70 dark:text-slate-100"
           />
         </>
       )}

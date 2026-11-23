@@ -80,7 +80,7 @@ export function FontWorkbench({ lang }: FontWorkbenchProps) {
     },
     loading: {
       text: t.engine.loading,
-      cls: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300',
+      cls: 'bg-violet-500/12 text-violet-700 dark:bg-violet-400/15 dark:text-violet-300',
       icon: <Loader2 className="h-3.5 w-3.5 animate-spin" />,
     },
     ready: {
@@ -103,9 +103,9 @@ export function FontWorkbench({ lang }: FontWorkbenchProps) {
   ];
 
   return (
-    <section className="mx-auto max-w-5xl rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm sm:p-6 dark:border-slate-800 dark:bg-slate-900/70">
+    <section className="qv-glass mx-auto max-w-5xl rounded-2xl border border-violet-950/10 p-5 sm:p-6 dark:border-violet-400/15">
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap gap-1.5 rounded-xl bg-slate-100 p-1 dark:bg-slate-950">
+        <div className="flex flex-wrap gap-1.5 rounded-xl border border-violet-950/10 bg-white/45 p-1 backdrop-blur-md dark:border-violet-400/15 dark:bg-[#1b1734]/45">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const active = activeTab === tab.key;
@@ -119,7 +119,7 @@ export function FontWorkbench({ lang }: FontWorkbenchProps) {
                 }}
                 className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-medium transition sm:text-sm ${
                   active
-                    ? 'bg-white text-indigo-600 shadow-xs dark:bg-slate-800 dark:text-indigo-400'
+                    ? 'bg-gradient-to-r from-violet-600/20 to-sky-400/20 text-violet-950 shadow-xs ring-1 ring-violet-500/25 dark:from-violet-500/30 dark:to-sky-400/20 dark:text-white dark:ring-violet-400/30'
                     : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'
                 }`}
               >
@@ -151,10 +151,10 @@ export function FontWorkbench({ lang }: FontWorkbenchProps) {
           const file = e.dataTransfer.files?.[0];
           if (file) void loadFontFile(file);
         }}
-        className={`mb-6 rounded-xl border-2 border-dashed p-5 transition ${
+        className={`mb-6 rounded-xl border border-dashed p-5 transition ${
           dragging
-            ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/20'
-            : 'border-slate-200 bg-slate-50/50 dark:border-slate-800 dark:bg-slate-950/40'
+            ? 'border-violet-500 bg-violet-500/10 dark:border-violet-400 dark:bg-violet-500/15'
+            : 'border-violet-950/15 bg-white/35 dark:border-violet-400/20 dark:bg-[#1a1733]/35'
         }`}
       >
         <input
@@ -179,7 +179,7 @@ export function FontWorkbench({ lang }: FontWorkbenchProps) {
             }}
             className="flex cursor-pointer flex-col items-center justify-center py-4 text-center"
           >
-            <div className="mb-3 rounded-full bg-indigo-50 p-3 text-indigo-600 dark:bg-indigo-950/60 dark:text-indigo-400">
+            <div className="mb-3 rounded-full bg-violet-500/12 p-3 text-violet-600 dark:bg-violet-400/15 dark:text-violet-300">
               <Upload className="h-5 w-5" />
             </div>
             <p className="text-sm font-medium text-slate-800 dark:text-slate-100">
@@ -190,7 +190,7 @@ export function FontWorkbench({ lang }: FontWorkbenchProps) {
         ) : (
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-indigo-50 p-2.5 text-indigo-600 dark:bg-indigo-950/60 dark:text-indigo-400">
+              <div className="rounded-lg bg-violet-500/12 p-2.5 text-violet-600 dark:bg-violet-400/15 dark:text-violet-300">
                 <FileType2 className="h-5 w-5" />
               </div>
               <div>

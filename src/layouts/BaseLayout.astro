@@ -35,6 +35,7 @@ const navItems: Array<{ key: Props['currentPath']; label: string; href: string }
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="alternate" hreflang="zh-CN" href={routeMap[currentPath].zh} />
@@ -63,13 +64,45 @@ const navItems: Array<{ key: Props['currentPath']; label: string; href: string }
     }
   </head>
   <body class="min-h-screen flex flex-col">
-    <header class="sticky top-0 z-30 border-b border-slate-200/80 bg-white/85 backdrop-blur dark:border-slate-800/80 dark:bg-slate-950/85">
+    <div class="qv-ambient" aria-hidden="true"></div>
+    <header class="sticky top-0 z-30 border-b border-violet-950/10 bg-white/65 backdrop-blur-xl backdrop-saturate-150 dark:border-violet-400/15 dark:bg-[#0d0b1a]/65">
       <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
         <a href={routeMap.workbench[lang]} class="flex items-center gap-2.5 font-semibold tracking-tight">
-          <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-sm font-bold text-white shadow-sm">
-            fx
-          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="h-8 w-8 shrink-0" fill="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="nav-bg-violet" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#0D0B1A" />
+                <stop offset="100%" stop-color="#1E1B4B" />
+              </linearGradient>
+              <radialGradient id="nav-sheen-violet" cx="0.25" cy="0.15" r="0.85">
+                <stop offset="0%" stop-color="#A78BFA" stop-opacity="0.30" />
+                <stop offset="100%" stop-color="#0D0B1A" stop-opacity="0" />
+              </radialGradient>
+              <linearGradient id="nav-prism-top" x1="14" y1="14" x2="50" y2="34" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#DDD6FE" />
+                <stop offset="100%" stop-color="#7C3AED" />
+              </linearGradient>
+              <linearGradient id="nav-prism-mid" x1="18" y1="26" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#818CF8" stop-opacity="0.95" />
+                <stop offset="100%" stop-color="#4F46E5" stop-opacity="0.75" />
+              </linearGradient>
+              <linearGradient id="nav-spark-cyan" x1="36" y1="32" x2="50" y2="50" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#38BDF8" />
+                <stop offset="100%" stop-color="#6366F1" />
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#nav-bg-violet)" />
+            <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#nav-sheen-violet)" />
+            <rect x="2.75" y="2.75" width="58.5" height="58.5" rx="15.25" stroke="#C4B5FD" stroke-opacity="0.32" stroke-width="1.5" />
+            <path d="M18 19L34 13L48 19L32 25L18 19Z" fill="url(#nav-prism-top)" />
+            <path d="M18 23L27 26.8V49L18 45.2V23Z" fill="url(#nav-prism-mid)" />
+            <path d="M27 31L42 25.5V32.5L27 38V31Z" fill="#A78BFA" fill-opacity="0.72" />
+            <path d="M35 37L46 48M46 37L35 48" stroke="url(#nav-spark-cyan)" stroke-width="4.5" stroke-linecap="round" />
+          </svg>
           <span class="text-lg">{t.siteName}</span>
+          <span class="rounded-md border border-violet-950/10 bg-violet-500/10 px-1.5 py-0.5 font-mono text-[10px] font-medium text-violet-700 dark:border-violet-400/20 dark:bg-violet-400/10 dark:text-violet-300">
+            wasm
+          </span>
         </a>
 
         <nav class="hidden items-center gap-6 text-sm font-medium md:flex">
@@ -79,7 +112,7 @@ const navItems: Array<{ key: Props['currentPath']; label: string; href: string }
                 href={item.href}
                 class={
                   currentPath === item.key
-                    ? 'text-indigo-600 dark:text-indigo-400'
+                    ? 'text-violet-600 dark:text-violet-300'
                     : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'
                 }
               >
@@ -117,14 +150,14 @@ const navItems: Array<{ key: Props['currentPath']; label: string; href: string }
       </div>
 
       <!-- Mobile compact nav -->
-      <div class="flex items-center justify-center gap-4 border-t border-slate-200/60 px-4 py-2 text-xs font-medium md:hidden dark:border-slate-800/60">
+      <div class="flex items-center justify-center gap-4 border-t border-violet-950/10 px-4 py-2 text-xs font-medium md:hidden dark:border-violet-400/15">
         {
           navItems.map((item) => (
             <a
               href={item.href}
               class={
                 currentPath === item.key
-                  ? 'text-indigo-600 dark:text-indigo-400'
+                  ? 'text-violet-600 dark:text-violet-300'
                   : 'text-slate-600 dark:text-slate-400'
               }
             >
@@ -139,7 +172,7 @@ const navItems: Array<{ key: Props['currentPath']; label: string; href: string }
       <slot />
     </main>
 
-    <footer class="border-t border-slate-200/80 bg-white/60 py-6 text-center text-xs text-slate-500 dark:border-slate-800/80 dark:bg-slate-950/60 dark:text-slate-400">
+    <footer class="border-t border-violet-950/10 bg-white/45 py-6 text-center text-xs text-slate-500 backdrop-blur-md dark:border-violet-400/15 dark:bg-[#0b0a14]/55 dark:text-slate-400">
       <div class="mx-auto max-w-6xl space-y-2 px-4">
         <p>{t.footer.localOnly}</p>
         <p class="flex items-center justify-center gap-3">

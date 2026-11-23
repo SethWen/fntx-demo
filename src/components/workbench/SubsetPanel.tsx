@@ -129,7 +129,7 @@ export function SubsetPanel({ lang, fileName, fileData, onError }: SubsetPanelPr
           onChange={(e) => setText(e.target.value)}
           rows={3}
           placeholder={t.textPlaceholder}
-          className="w-full rounded-xl border border-slate-200 bg-white p-3 text-sm outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950"
+          className="w-full rounded-xl border border-slate-200/80 bg-white/75 p-3 text-sm outline-none focus:border-violet-500 dark:border-violet-400/20 dark:bg-[#0d0b1a]/70"
         />
       </div>
 
@@ -143,7 +143,7 @@ export function SubsetPanel({ lang, fileName, fileData, onError }: SubsetPanelPr
             value={customName}
             onChange={(e) => setCustomName(e.target.value)}
             placeholder={t.fontNamePlaceholder}
-            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950"
+            className="w-full rounded-xl border border-slate-200/80 bg-white/75 px-3 py-2 text-sm outline-none focus:border-violet-500 dark:border-violet-400/20 dark:bg-[#0d0b1a]/70"
           />
         </div>
 
@@ -161,8 +161,8 @@ export function SubsetPanel({ lang, fileName, fileData, onError }: SubsetPanelPr
                   onClick={() => toggleFormat(fmt)}
                   className={`rounded-lg border px-2.5 py-1.5 text-xs font-semibold uppercase transition ${
                     active
-                      ? 'border-indigo-600 bg-indigo-600 text-white'
-                      : 'border-slate-200 bg-white text-slate-600 hover:border-indigo-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300'
+                      ? 'border-violet-600 bg-violet-600 text-white'
+                      : 'border-slate-200/80 bg-white/70 text-slate-600 hover:border-violet-400 dark:border-violet-400/20 dark:bg-[#1a1733]/60 dark:text-slate-300'
                   }`}
                 >
                   {fmt}
@@ -179,7 +179,7 @@ export function SubsetPanel({ lang, fileName, fileData, onError }: SubsetPanelPr
             type="checkbox"
             checked={dropHinting}
             onChange={(e) => setDropHinting(e.target.checked)}
-            className="accent-indigo-600"
+            className="accent-violet-600"
           />
           <span>{t.dropHinting}</span>
         </label>
@@ -188,7 +188,7 @@ export function SubsetPanel({ lang, fileName, fileData, onError }: SubsetPanelPr
             type="checkbox"
             checked={legacyTableStrip}
             onChange={(e) => setLegacyTableStrip(e.target.checked)}
-            className="accent-indigo-600"
+            className="accent-violet-600"
           />
           <span>{t.legacyTableStrip}</span>
         </label>
@@ -197,7 +197,7 @@ export function SubsetPanel({ lang, fileName, fileData, onError }: SubsetPanelPr
             type="checkbox"
             checked={strict}
             onChange={(e) => setStrict(e.target.checked)}
-            className="accent-indigo-600"
+            className="accent-violet-600"
           />
           <span>{t.strictMode}</span>
         </label>
@@ -282,7 +282,7 @@ export function SubsetPanel({ lang, fileName, fileData, onError }: SubsetPanelPr
           type="button"
           disabled={busy || !text.trim()}
           onClick={handleBuild}
-          className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60"
+          className="qv-btn-primary inline-flex items-center gap-2 rounded-xl border border-violet-400/35 px-5 py-2.5 text-sm font-medium text-white transition disabled:cursor-not-allowed disabled:opacity-60"
         >
           {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Scissors className="h-4 w-4" />}
           <span>{busy ? t.running : t.run}</span>
@@ -320,9 +320,9 @@ export function SubsetPanel({ lang, fileName, fileData, onError }: SubsetPanelPr
                 key={item.format}
                 type="button"
                 onClick={() => downloadBytes(item.data, `${baseName}.${item.format}`)}
-                className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-medium text-slate-800 shadow-xs transition hover:border-indigo-500 hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+                className="inline-flex items-center gap-2 rounded-lg border border-slate-200/80 bg-white/75 px-3.5 py-2 text-xs font-medium text-slate-800 shadow-xs transition hover:border-violet-500 hover:text-violet-600 dark:border-violet-400/20 dark:bg-[#0d0b1a]/70 dark:text-slate-100"
               >
-                <Download className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400" />
+                <Download className="h-3.5 w-3.5 text-violet-600 dark:text-violet-300" />
                 <span className="uppercase">{item.format}</span>
                 <span className="text-slate-400">({formatBytes(item.data.byteLength)})</span>
               </button>

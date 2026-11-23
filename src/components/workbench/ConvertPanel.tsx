@@ -63,8 +63,8 @@ export function ConvertPanel({ lang, fileName, fileData, onError }: ConvertPanel
                 onClick={() => setTargetFormat(fmt)}
                 className={`rounded-lg border px-3 py-1.5 text-xs font-semibold uppercase transition ${
                   targetFormat === fmt
-                    ? 'border-indigo-600 bg-indigo-600 text-white'
-                    : 'border-slate-200 bg-white text-slate-700 hover:border-indigo-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200'
+                    ? 'border-violet-600 bg-violet-600 text-white shadow-xs'
+                    : 'border-slate-200/80 bg-white/70 text-slate-700 hover:border-violet-400 dark:border-violet-400/20 dark:bg-[#1a1733]/60 dark:text-slate-200'
                 }`}
               >
                 {fmt}
@@ -77,7 +77,7 @@ export function ConvertPanel({ lang, fileName, fileData, onError }: ConvertPanel
           type="button"
           disabled={busy}
           onClick={handleConvert}
-          className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60"
+          className="qv-btn-primary inline-flex items-center gap-2 rounded-xl border border-violet-400/35 px-5 py-2.5 text-sm font-medium text-white transition disabled:cursor-not-allowed disabled:opacity-60"
         >
           {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
           <span>{busy ? t.running : t.run}</span>
@@ -117,7 +117,7 @@ export function ConvertPanel({ lang, fileName, fileData, onError }: ConvertPanel
               onClick={() =>
                 downloadBytes(output.data, `${stripExtension(fileName)}.${output.format}`)
               }
-              className="inline-flex items-center gap-2 rounded-lg border border-indigo-600 bg-indigo-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-indigo-500"
+              className="qv-btn-primary inline-flex items-center gap-2 rounded-lg border border-violet-400/35 px-4 py-2 text-xs font-medium text-white transition"
             >
               <Download className="h-3.5 w-3.5" />
               <span>
