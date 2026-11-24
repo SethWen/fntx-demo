@@ -13,7 +13,7 @@ const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT;
 ---
 
 {
-  adsenseClient ? (
+  adsenseClient && (
     <aside
       aria-label={t.ad.label}
       class={`mx-auto my-6 max-w-5xl rounded-xl border border-slate-200/80 bg-white/60 p-3 text-center dark:border-slate-800 dark:bg-slate-900/50 ${className}`}
@@ -32,13 +32,6 @@ const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT;
           (window.adsbygoogle = window.adsbygoogle || []).push({});
         } catch {}
       </script>
-    </aside>
-  ) : (
-    <aside
-      aria-label={t.ad.label}
-      class={`mx-auto my-6 max-w-5xl rounded-xl border border-dashed border-slate-300/80 bg-slate-100/60 px-4 py-3 text-center text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-900/40 dark:text-slate-400 ${className}`}
-    >
-      {t.ad.placeholder}
     </aside>
   )
 }

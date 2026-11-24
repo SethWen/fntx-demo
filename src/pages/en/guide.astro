@@ -1,6 +1,37 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'How do I subset a large CJK font for the web?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Drop your source font (e.g. a 15–30 MB .ttf) into the workbench, switch to Subset / Merge, paste the characters you need, select WOFF2, and click Build. You can preview the output immediately in the browser before downloading.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do I merge BMP and SIP supplementary fonts?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Your primary font covers 00000 - 0FFFF by default. Click Add Source to attach a supplementary font (e.g. Extension B in 20000 - 2FFFF), and fntx will subset each plane and merge them into one unified font.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are my font files uploaded to any server?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Never. Every operation runs strictly inside a local WebAssembly Web Worker in your browser memory.',
+      },
+    },
+  ],
+};
 ---
 
 <BaseLayout
@@ -8,6 +39,7 @@ import AdSlot from '../../components/AdSlot.astro';
   currentPath="guide"
   title="User Guide & FAQ - fntx Web"
   description="Learn how to subset large CJK fonts, merge BMP and SIP planes, convert to WOFF2, and unpack/pack TTC collections locally in your browser."
+  jsonLd={jsonLd}
 >
   <article class="mx-auto max-w-4xl space-y-6 px-4 py-10 sm:px-6">
     <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">User Guide & FAQ</h1>
