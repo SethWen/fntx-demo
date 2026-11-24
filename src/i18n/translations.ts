@@ -193,7 +193,7 @@ export const translations: Record<Lang, Translations> = {
       subset: {
         title: '按需提取字符子集（支持多源扩展区合并）',
         cffWarning:
-          '当前字体为 CFF 轮廓（OTF），暂不支持子集化（仅支持 TrueType 轮廓），可前往格式转换生成 WOFF / WOFF2 / SVG。',
+          '当前字体为 CFF 轮廓（OTF），暂不支持子集化（仅支持 TrueType 轮廓），可前往格式转换生成 TTF / WOFF / WOFF2 / SVG。',
         goToConvert: '前往格式转换',
         ttcNotice: '当前文件为 TTC 字体集合，请先在「TTC 集合」提取单个 TrueType 字体。',
         goToTtc: '前往 TTC 集合',
@@ -224,7 +224,8 @@ export const translations: Record<Lang, Translations> = {
         title: '单字体格式互转',
         targetFormat: '目标格式',
         currentFormatTag: '当前',
-        cffUnsupportedHint: '当前字体为 CFF 轮廓（OTF），暂不支持转换为 TTF 或 EOT。',
+        cffUnsupportedHint:
+          '当前字体为 CFF 轮廓（OTF），暂不支持直接转换为 EOT（可先转为 TTF，或输出 WOFF / WOFF2 / SVG）。',
         ttcNotice: '当前文件为 TTC 字体集合，请先在「TTC 集合」提取单个字体后再转换格式。',
         goToTtc: '前往 TTC 集合',
         unsupportedNotice: '当前文件格式不支持转换。',
@@ -334,7 +335,7 @@ export const translations: Record<Lang, Translations> = {
       subset: {
         title: 'Subset Characters (with optional multi-source merge)',
         cffWarning:
-          'CFF (OTF) outlines are not supported for subsetting yet (TrueType only). You can convert to WOFF / WOFF2 / SVG instead.',
+          'CFF (OTF) outlines are not supported for subsetting yet (TrueType only). You can convert to TTF / WOFF / WOFF2 / SVG instead.',
         goToConvert: 'Go to Convert',
         ttcNotice:
           'This file is a TTC collection. Unpack a single TrueType face in TTC Tools first.',
@@ -367,7 +368,8 @@ export const translations: Record<Lang, Translations> = {
         title: 'Font Format Conversion',
         targetFormat: 'Target Format',
         currentFormatTag: 'Current',
-        cffUnsupportedHint: 'CFF (OTF) outlines cannot be converted to TTF or EOT.',
+        cffUnsupportedHint:
+          'CFF (OTF) outlines cannot be converted directly to EOT (convert to TTF first, or export WOFF / WOFF2 / SVG).',
         ttcNotice: 'This file is a TTC collection. Unpack a single face in TTC Tools first.',
         goToTtc: 'Go to TTC Tools',
         unsupportedNotice: 'This file format is not supported for conversion.',

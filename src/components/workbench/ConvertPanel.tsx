@@ -26,7 +26,7 @@ function isFormatDisabled(
   fontInfo: FontInfoOutput | null,
 ): boolean {
   if (target === sourceFormat) return true;
-  if (fontInfo && !fontInfo.isTruetype && (target === 'ttf' || target === 'eot')) return true;
+  if (fontInfo && !fontInfo.isTruetype && target === 'eot') return true;
   return false;
 }
 
