@@ -11,7 +11,7 @@
   </p>
 </div>
 
-**fntx Web** is a browser-based online font processing workbench powered by the [`fntx`](https://github.com/modone/fntx) Rust engine. All font parsing, subsetting, merging, and format conversion run strictly inside your browser's local **WebAssembly + Web Worker** sandbox—never uploading multi-megabyte font files to any server, delivering both high speed and complete privacy.
+**fntx Web** is a browser-based online font processing workbench powered by the [`fntx`](<>) Rust engine. All font parsing, subsetting, merging, and format conversion run strictly inside your browser's local **WebAssembly + Web Worker** sandbox—never uploading multi-megabyte font files to any server, delivering both high speed and complete privacy.
 
 ---
 
@@ -53,9 +53,6 @@
 ## Local Development & Deployment
 
 ```bash
-# Sync latest WASM artifacts from ../fntx/crates/fntx-napi/dist (optional)
-pnpm run sync:wasm
-
 # Install dependencies
 pnpm install
 

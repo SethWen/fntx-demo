@@ -11,7 +11,7 @@
   </p>
 </div>
 
-**fntx Web** 是基于 [`fntx`](https://github.com/modone/fntx) Rust 核心引擎构建的浏览器端在线字体处理工具站。所有字体解析、裁剪、合并与格式转换均在用户浏览器本地 **WebAssembly + Web Worker** 沙箱中完成，无需将动辄数十 MB 的字库上传至任何服务器，兼顾处理速度与文件隐私安全。
+**fntx Web** 是基于 [`fntx`](<>) Rust 核心引擎构建的浏览器端在线字体处理工具站。所有字体解析、裁剪、合并与格式转换均在用户浏览器本地 **WebAssembly + Web Worker** 沙箱中完成，无需将动辄数十 MB 的字库上传至任何服务器，兼顾处理速度与文件隐私安全。
 
 ---
 
@@ -53,9 +53,6 @@
 ## 本地开发与部署
 
 ```bash
-# 从 ../fntx/crates/fntx-napi/dist 同步最新 WASM 产物（可选）
-pnpm run sync:wasm
-
 # 安装依赖
 pnpm install
 
