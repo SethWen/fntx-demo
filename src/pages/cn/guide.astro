@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: '如何对超大中文字库做网页按需裁剪？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '在工作台上传源字体（如 15MB~30MB 的 .ttf），切换到「子集化 / 合并」标签页，粘贴网页实际用到的文字，勾选 WOFF2 输出格式与「剔除 Hinting」，点击构建即可在几百毫秒内导出极简字体并直接在线预览。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '如何合并基本区（BMP）与生僻字扩展区（SIP）字库？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '主字体默认负责 00000 - 0FFFF（BMP 平面）。点击「添加补充字体源」，上传扩展区字体并设置区间 20000 - 2FFFF，引擎会自动按码点路由裁剪并合并为单一字体。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '文件会上传到服务器吗？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '完全不会。所有运算都在浏览器本地的 WebAssembly（Web Worker）沙箱内执行，断网状态下（页面已加载后）同样可以完成处理。',
+      },
+    },
+  ],
+};
+---
+
+<BaseLayout
+  lang="zh"
+  currentPath="guide"
+  title="使用指南与常见问题 - fntx Web"
+  description="了解如何在浏览器中使用 fntx Web 进行中文字体子集化、BMP/SIP 多源合并、WOFF2 转换与 TTC 拆装。"
+  jsonLd={jsonLd}
+>
+  <article class="mx-auto max-w-4xl space-y-6 px-4 py-10 sm:px-6">
+    <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">使用指南与常见问题 (FAQ)</h1>
+
+    <section class="space-y-3 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900/60">
+      <h2 class="text-lg font-semibold">1. 如何对超大中文字库做网页按需裁剪？</h2>
+      <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+        在工作台上传你的源字体（例如 15MB~30MB 的 <code>.ttf</code>），切换到「子集化 / 合并」标签页，粘贴网页实际用到的文字，勾选 <code>WOFF2</code> 输出格式与「剔除 Hinting」，点击构建即可在几百毫秒内导出极简字体并直接在线预览。
+      </p>
+    </section>
+
+    <section class="space-y-3 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900/60">
+      <h2 class="text-lg font-semibold">2. 如何合并基本区（BMP）与生僻字扩展区（SIP）字库？</h2>
+      <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+        主字体默认负责 <code>00000 - 0FFFF</code>（BMP 平面）。点击「添加补充字体源」，上传扩展区字体（如 P2 扩展字库）并设置区间 <code>20000 - 2FFFF</code>，引擎会自动按码点路由裁剪并合并为单一字体。
+      </p>
+    </section>
+
+    <section class="space-y-3 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900/60">
+      <h2 class="text-lg font-semibold">3. 文件会上传到服务器吗？</h2>
+      <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+        完全不会。所有运算都在你浏览器本地的 WebAssembly（Web Worker）沙箱内执行，断网状态下（页面已加载后）同样可以完成处理。
+      </p>
+    </section>
+
+    <AdSlot lang="zh" slotId="guide-bottom" />
+  </article>
+</BaseLayout>

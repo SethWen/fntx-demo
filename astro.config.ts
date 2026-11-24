@@ -7,8 +7,8 @@ export default defineConfig({
   site: 'https://fntx.modone.me',
   integrations: [react(), sitemap()],
   i18n: {
-    defaultLocale: 'zh',
-    locales: ['zh', 'en'],
+    defaultLocale: 'en',
+    locales: ['en', { path: 'cn', codes: ['zh', 'zh-CN'] }],
     routing: {
       prefixDefaultLocale: false,
     },

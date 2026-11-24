@@ -4,7 +4,7 @@ import AdSlot from '../components/AdSlot.astro';
 import { FontWorkbench } from '../components/workbench/FontWorkbench';
 import { translations } from '../i18n/translations';
 
-const lang = 'zh';
+const lang = 'en';
 const t = translations[lang];
 
 const jsonLd = {
@@ -16,7 +16,7 @@ const jsonLd = {
   applicationCategory: 'UtilitiesApplication',
   operatingSystem: 'Any',
   browserRequirements: 'Requires WebAssembly and Web Workers',
-  inLanguage: 'zh-CN',
+  inLanguage: 'en',
   offers: {
     '@type': 'Offer',
     price: '0',
@@ -53,25 +53,25 @@ const jsonLd = {
 
     <FontWorkbench client:load lang={lang} />
 
-    <AdSlot lang={lang} slotId="home-bottom" />
+    <AdSlot lang={lang} slotId="home-bottom-en" />
 
     <section class="mx-auto mt-10 grid max-w-5xl gap-4 sm:grid-cols-3">
       <div class="qv-glass-card rounded-2xl border border-violet-950/10 p-5 dark:border-violet-400/15">
-        <h2 class="text-sm font-semibold text-slate-900 dark:text-white">多源子集化与合并</h2>
+        <h2 class="text-sm font-semibold text-slate-900 dark:text-white">Multi-Source Subsetting</h2>
         <p class="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
-          支持 BMP 基本区与 SIP 扩展区字库按 Unicode 区间独立裁剪并自动合并，精确统计缺失码点。
+          Subset and merge BMP & SIP supplementary fonts by Unicode range in a single pass with missing codepoint reports.
         </p>
       </div>
       <div class="qv-glass-card rounded-2xl border border-violet-950/10 p-5 dark:border-violet-400/15">
-        <h2 class="text-sm font-semibold text-slate-900 dark:text-white">全格式本地互转</h2>
+        <h2 class="text-sm font-semibold text-slate-900 dark:text-white">Full Format Conversion</h2>
         <p class="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
-          支持 TTF、WOFF2、WOFF、OTF（TrueType 提升为 CFF 三次贝塞尔）、EOT 与 SVG 一键转换。
+          Convert locally between TTF, WOFF2, WOFF, OTF (quadratic to cubic CFF), EOT, and SVG without uploading files.
         </p>
       </div>
       <div class="qv-glass-card rounded-2xl border border-violet-950/10 p-5 dark:border-violet-400/15">
-        <h2 class="text-sm font-semibold text-slate-900 dark:text-white">TTC 集合无损拆装</h2>
+        <h2 class="text-sm font-semibold text-slate-900 dark:text-white">TTC Pack & Unpack</h2>
         <p class="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
-          可视化查看 TTC 容器表共享统计，支持单字形或全量拆解为独立 SFNT，以及多字体表去重打包。
+          Inspect shared table stats in TrueType Collections, extract individual faces, or pack multiple fonts with deduplication.
         </p>
       </div>
     </section>
