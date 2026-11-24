@@ -1,17 +1,36 @@
 import { useState } from 'react';
-import { Download, Loader2, Plus, Scissors, Trash2 } from 'lucide-react';
-import type { FontFormat, FontSourceConfig } from '@/vendor/fntx-wasm/index';
+import {
+  AlertTriangle,
+  Download,
+  Layers,
+  Loader2,
+  Plus,
+  RefreshCw,
+  Scissors,
+  Trash2,
+} from 'lucide-react';
+import type {
+  ContainerFormat,
+  FontFormat,
+  FontInfoOutput,
+  FontSourceConfig,
+} from '@/vendor/fntx-wasm/index';
 import type { BuildOutputPayload } from '../../workers/fntx.worker';
 import { translations, type Lang } from '../../i18n/translations';
 import { fntxClient } from '../../lib/fntx-client';
 import { downloadBytes, formatBytes, stripExtension } from '../../lib/format-utils';
 import { FontPreview } from './FontPreview';
+import type { TabKey } from './FontWorkbench';
 
 interface SubsetPanelProps {
   lang: Lang;
   fileName: string;
   fileData: Uint8Array | null;
+  sfntData: Uint8Array | null;
+  format: ContainerFormat | null;
+  fontInfo: FontInfoOutput | null;
   onError: (message: string) => void;
+  onSwitchTab: (tab: TabKey) => void;
 }
 
 interface ExtraSource {
@@ -24,7 +43,16 @@ interface ExtraSource {
 
 const ALL_FORMATS: FontFormat[] = ['woff2', 'ttf', 'otf', 'woff', 'eot', 'svg'];
 
-export function SubsetPanel({ lang, fileName, fileData, onError }: SubsetPanelProps) {
+export function SubsetPanel({
+  lang,
+  fileName,
+  fileData,
+  sfntData,
+  format,
+  fontInfo,
+  onError,
+  onSwitchTab,
+}: SubsetPanelProps) {
   const t = translations[lang].workbench.subset;
   const [text, setText] = useState('你好世界 fntx 0123456789');
   const [customName, setCustomName] = useState('');
@@ -34,7 +62,12 @@ export function SubsetPanel({ lang, fileName, fileData, onError }: SubsetPanelPr
   const [strict, setStrict] = useState(false);
   const [extraSources, setExtraSources] = useState<ExtraSource[]>([]);
   const [busy, setBusy] = useState(false);
-  const [result, setResult] = useState<BuildOutputPayload | null>(null);
+  const [resultState, setResultState] = useState<{
+    source: Uint8Array;
+    payload: BuildOutputPayload;
+  } | null>(null);
+
+  const result = resultState && resultState.source === fileData ? resultState.payload : null;
 
   const toggleFormat = (fmt: FontFormat) => {
     setSelectedFormats((prev) =>
@@ -50,20 +83,32 @@ export function SubsetPanel({ lang, fileName, fileData, onError }: SubsetPanelPr
     if (!files || files.length === 0) return;
     const file = files[0];
     const buf = new Uint8Array(await file.arrayBuffer());
-    setExtraSources((prev) => [
-      ...prev,
-      {
-        id: Date.now() + Math.random(),
-        name: file.name,
-        startHex: '20000',
-        endHex: '2FFFF',
-        data: buf,
-      },
-    ]);
+    onError('');
+    try {
+      const loaded = await fntxClient.loadFont(buf);
+      const sourceSfnt =
+        loaded.sfntData ?? (loaded.format === 'ttf' || loaded.format === 'otf' ? buf : null);
+      if (!sourceSfnt || !loaded.info?.isTruetype) {
+        onError(t.extraSourceInvalid);
+        return;
+      }
+      setExtraSources((prev) => [
+        ...prev,
+        {
+          id: Date.now() + Math.random(),
+          name: file.name,
+          startHex: '20000',
+          endHex: '2FFFF',
+          data: sourceSfnt,
+        },
+      ]);
+    } catch (err) {
+      onError(err instanceof Error ? err.message : String(err));
+    }
   };
 
   const handleBuild = async () => {
-    if (!fileData) return;
+    if (!sfntData) return;
     setBusy(true);
     onError('');
     try {
@@ -72,7 +117,7 @@ export function SubsetPanel({ lang, fileName, fileData, onError }: SubsetPanelPr
           label: 'primary',
           start: 0x00000,
           end: 0x0ffff,
-          data: fileData,
+          data: sfntData,
         },
         ...extraSources.map((src, idx) => ({
           label: `extra-${idx + 1}`,
@@ -94,7 +139,9 @@ export function SubsetPanel({ lang, fileName, fileData, onError }: SubsetPanelPr
         },
         { dropHinting, legacyTableStrip },
       );
-      setResult(built);
+      if (fileData) {
+        setResultState({ source: fileData, payload: built });
+      }
     } catch (err) {
       onError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -102,13 +149,39 @@ export function SubsetPanel({ lang, fileName, fileData, onError }: SubsetPanelPr
     }
   };
 
-  if (!fileData) {
+  if (!fileData || !format) {
     return (
       <div className="rounded-xl border border-dashed border-slate-200 py-12 text-center text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
         {translations[lang].workbench.inspect.empty}
       </div>
     );
   }
+
+  if (format === 'ttc') {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-violet-300/60 bg-violet-500/5 py-10 text-center dark:border-violet-400/25">
+        <p className="max-w-md text-sm text-slate-600 dark:text-slate-300">{t.ttcNotice}</p>
+        <button
+          type="button"
+          onClick={() => onSwitchTab('ttc')}
+          className="qv-btn-primary inline-flex items-center gap-2 rounded-xl border border-violet-400/35 px-4 py-2 text-xs font-medium text-white"
+        >
+          <Layers className="h-4 w-4" />
+          <span>{t.goToTtc}</span>
+        </button>
+      </div>
+    );
+  }
+
+  if (!sfntData || !fontInfo) {
+    return (
+      <div className="rounded-xl border border-dashed border-slate-200 py-12 text-center text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
+        {t.unsupportedNotice}
+      </div>
+    );
+  }
+
+  const isCff = !fontInfo.isTruetype;
 
   const previewOutput =
     result?.outputs.find(
@@ -120,6 +193,23 @@ export function SubsetPanel({ lang, fileName, fileData, onError }: SubsetPanelPr
 
   return (
     <div className="space-y-5">
+      {isCff && (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-amber-300/70 bg-amber-50/80 p-3.5 text-xs text-amber-800 dark:border-amber-500/30 dark:bg-amber-950/30 dark:text-amber-300">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 shrink-0" />
+            <span>{t.cffWarning}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => onSwitchTab('convert')}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-amber-400/50 bg-white/80 px-3 py-1.5 font-medium text-amber-900 hover:bg-white dark:bg-amber-900/40 dark:text-amber-200"
+          >
+            <RefreshCw className="h-3.5 w-3.5" />
+            <span>{t.goToConvert}</span>
+          </button>
+        </div>
+      )}
+
       <div>
         <label className="mb-1.5 block text-xs font-medium text-slate-600 dark:text-slate-300">
           {t.textLabel}
@@ -216,7 +306,7 @@ export function SubsetPanel({ lang, fileName, fileData, onError }: SubsetPanelPr
             <span>{t.addSource}</span>
             <input
               type="file"
-              accept=".ttf,.otf,.woff,.woff2,.eot"
+              accept=".ttf,.woff,.woff2,.eot"
               className="hidden"
               onChange={(e) => {
                 void handleAddExtraSource(e.target.files);
@@ -280,7 +370,7 @@ export function SubsetPanel({ lang, fileName, fileData, onError }: SubsetPanelPr
       <div className="flex justify-end">
         <button
           type="button"
-          disabled={busy || !text.trim()}
+          disabled={busy || isCff || !text.trim()}
           onClick={handleBuild}
           className="qv-btn-primary inline-flex items-center gap-2 rounded-xl border border-violet-400/35 px-5 py-2.5 text-sm font-medium text-white transition disabled:cursor-not-allowed disabled:opacity-60"
         >

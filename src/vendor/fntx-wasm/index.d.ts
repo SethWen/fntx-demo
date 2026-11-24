@@ -39,7 +39,11 @@ export interface BuildPlanOutput {
   missing: Array<number>
 }
 
+export type ContainerFormat = 'ttf' | 'otf' | 'woff' | 'woff2' | 'eot' | 'ttc' | 'svg' | 'unknown'
+
 export declare function convert(font: Uint8Array, format: FontFormat, svgTestcard?: boolean | undefined | null): Uint8Array
+
+export declare function detectFormat(data: Uint8Array): ContainerFormat
 
 export interface EngineConfig {
   sources: Array<FontSourceConfig>
@@ -73,17 +77,15 @@ export declare function inspect(font: Uint8Array): FontInfoOutput
 
 export declare function inspectTtc(ttc: Uint8Array): TtcInfoOutput
 
+export declare function packTtc(fonts: Array<Uint8Array>): Uint8Array
+
 export interface PlanGroupOutput {
   source: number
   label: string
   codepoints: Array<number>
 }
 
-export declare function sfntFromTtc(ttc: Uint8Array, index: number): Uint8Array
-
-export declare function sfntsFromTtc(ttc: Uint8Array): Array<Uint8Array>
-
-export declare function ttcFromSfnts(fonts: Array<Uint8Array>): Uint8Array
+export declare function toSfnt(data: Uint8Array): Uint8Array
 
 export interface TtcInfoOutput {
   majorVersion: number
@@ -95,3 +97,7 @@ export interface TtcInfoOutput {
   sharedTables: number
   fonts: Array<FontInfoOutput>
 }
+
+export declare function unpackTtc(ttc: Uint8Array): Array<Uint8Array>
+
+export declare function unpackTtcAt(ttc: Uint8Array, index: number): Uint8Array

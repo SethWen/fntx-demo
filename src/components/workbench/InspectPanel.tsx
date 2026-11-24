@@ -1,19 +1,30 @@
-import type { FontInfoOutput } from '@/vendor/fntx-wasm/index';
+import { Layers } from 'lucide-react';
+import type { ContainerFormat, FontInfoOutput } from '@/vendor/fntx-wasm/index';
 import { translations, type Lang } from '../../i18n/translations';
 import { formatBytes } from '../../lib/format-utils';
 import { FontPreview } from './FontPreview';
+import type { TabKey } from './FontWorkbench';
 
 interface InspectPanelProps {
   lang: Lang;
+  format: ContainerFormat | null;
   info: FontInfoOutput | null;
   fileData: Uint8Array | null;
-  fileExt: string;
+  sfntData: Uint8Array | null;
+  onSwitchTab: (tab: TabKey) => void;
 }
 
-export function InspectPanel({ lang, info, fileData, fileExt }: InspectPanelProps) {
+export function InspectPanel({
+  lang,
+  format,
+  info,
+  fileData,
+  sfntData,
+  onSwitchTab,
+}: InspectPanelProps) {
   const t = translations[lang].workbench.inspect;
 
-  if (!info || !fileData) {
+  if (!fileData || !format) {
     return (
       <div className="rounded-xl border border-dashed border-slate-200 py-12 text-center text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
         {t.empty}
@@ -21,7 +32,32 @@ export function InspectPanel({ lang, info, fileData, fileExt }: InspectPanelProp
     );
   }
 
+  if (format === 'ttc') {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-violet-300/60 bg-violet-500/5 py-10 text-center dark:border-violet-400/25">
+        <p className="max-w-md text-sm text-slate-600 dark:text-slate-300">{t.ttcNotice}</p>
+        <button
+          type="button"
+          onClick={() => onSwitchTab('ttc')}
+          className="qv-btn-primary inline-flex items-center gap-2 rounded-xl border border-violet-400/35 px-4 py-2 text-xs font-medium text-white"
+        >
+          <Layers className="h-4 w-4" />
+          <span>{t.goToTtc}</span>
+        </button>
+      </div>
+    );
+  }
+
+  if (!info) {
+    return (
+      <div className="rounded-xl border border-dashed border-slate-200 py-12 text-center text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
+        {t.unsupportedNotice}
+      </div>
+    );
+  }
+
   const rows: Array<{ label: string; value: string }> = [
+    { label: t.containerFormat, value: format.toUpperCase() },
     { label: t.familyName, value: info.familyName || '-' },
     { label: t.postscriptName, value: info.postscriptName || '-' },
     { label: t.unitsPerEm, value: String(info.unitsPerEm) },
@@ -31,9 +67,12 @@ export function InspectPanel({ lang, info, fileData, fileExt }: InspectPanelProp
     { label: t.fileSize, value: formatBytes(fileData.byteLength) },
   ];
 
+  const previewBytes = sfntData ?? fileData;
+  const previewFormat = info.isTruetype ? 'ttf' : 'otf';
+
   return (
     <div>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {rows.map((row) => (
           <div
             key={row.label}
@@ -50,7 +89,7 @@ export function InspectPanel({ lang, info, fileData, fileExt }: InspectPanelProp
         ))}
       </div>
 
-      <FontPreview fontBytes={fileData} format={fileExt} lang={lang} />
+      <FontPreview fontBytes={previewBytes} format={previewFormat} lang={lang} />
     </div>
   );
 }

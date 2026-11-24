@@ -1389,10 +1389,13 @@ try {
 export default __napiModule.exports
 export const BuildResult = __napiModule.exports.BuildResult
 export const FontEngine = __napiModule.exports.FontEngine
+export const ContainerFormat = __napiModule.exports.ContainerFormat
 export const convert = __napiModule.exports.convert
+export const detectFormat = __napiModule.exports.detectFormat
 export const FontFormat = __napiModule.exports.FontFormat
 export const inspect = __napiModule.exports.inspect
 export const inspectTtc = __napiModule.exports.inspectTtc
-export const sfntFromTtc = __napiModule.exports.sfntFromTtc
-export const sfntsFromTtc = __napiModule.exports.sfntsFromTtc
-export const ttcFromSfnts = __napiModule.exports.ttcFromSfnts
+export const packTtc = __napiModule.exports.packTtc
+export const toSfnt = __napiModule.exports.toSfnt
+export const unpackTtc = __napiModule.exports.unpackTtc
+export const unpackTtcAt = __napiModule.exports.unpackTtcAt

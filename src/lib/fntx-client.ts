@@ -1,5 +1,6 @@
 import type {
   BuildParams,
+  ContainerFormat,
   EngineOptions,
   FontFormat,
   FontInfoOutput,
@@ -8,6 +9,7 @@ import type {
 } from '@/vendor/fntx-wasm/index';
 import type {
   BuildOutputPayload,
+  LoadedFontPayload,
   WorkerRequest,
   WorkerRequestPayload,
   WorkerResponse,
@@ -97,6 +99,18 @@ class FntxClient {
     return this.call<void>({ type: 'init' });
   }
 
+  detectFormat(data: Uint8Array): Promise<ContainerFormat> {
+    return this.call<ContainerFormat>({ type: 'detectFormat', data });
+  }
+
+  toSfnt(data: Uint8Array): Promise<Uint8Array> {
+    return this.call<Uint8Array>({ type: 'toSfnt', data });
+  }
+
+  loadFont(data: Uint8Array): Promise<LoadedFontPayload> {
+    return this.call<LoadedFontPayload>({ type: 'loadFont', data });
+  }
+
   inspect(data: Uint8Array): Promise<FontInfoOutput> {
     return this.call<FontInfoOutput>({ type: 'inspect', data });
   }
@@ -117,16 +131,16 @@ class FntxClient {
     return this.call<TtcInfoOutput>({ type: 'inspectTtc', data });
   }
 
-  sfntFromTtc(data: Uint8Array, index: number): Promise<Uint8Array> {
-    return this.call<Uint8Array>({ type: 'sfntFromTtc', data, index });
+  unpackTtcAt(data: Uint8Array, index: number): Promise<Uint8Array> {
+    return this.call<Uint8Array>({ type: 'unpackTtcAt', data, index });
   }
 
-  sfntsFromTtc(data: Uint8Array): Promise<Uint8Array[]> {
-    return this.call<Uint8Array[]>({ type: 'sfntsFromTtc', data });
+  unpackTtc(data: Uint8Array): Promise<Uint8Array[]> {
+    return this.call<Uint8Array[]>({ type: 'unpackTtc', data });
   }
 
-  ttcFromSfnts(fonts: Uint8Array[]): Promise<Uint8Array> {
-    return this.call<Uint8Array>({ type: 'ttcFromSfnts', fonts });
+  packTtc(fonts: Uint8Array[]): Promise<Uint8Array> {
+    return this.call<Uint8Array>({ type: 'packTtc', fonts });
   }
 }
 

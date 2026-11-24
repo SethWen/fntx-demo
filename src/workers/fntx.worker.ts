@@ -1,9 +1,10 @@
 import type {
   BuildParams,
+  ContainerFormat,
+  EngineOptions,
   FontFormat,
   FontInfoOutput,
   FontSourceConfig,
-  EngineOptions,
   TtcInfoOutput,
 } from '@/vendor/fntx-wasm/index';
 
@@ -20,6 +21,9 @@ async function getWasm(): Promise<WasmModule> {
 
 export type WorkerRequestPayload =
   | { type: 'init' }
+  | { type: 'detectFormat'; data: Uint8Array }
+  | { type: 'toSfnt'; data: Uint8Array }
+  | { type: 'loadFont'; data: Uint8Array }
   | { type: 'inspect'; data: Uint8Array }
   | { type: 'convert'; data: Uint8Array; format: FontFormat }
   | {
@@ -29,11 +33,18 @@ export type WorkerRequestPayload =
       params: BuildParams;
     }
   | { type: 'inspectTtc'; data: Uint8Array }
-  | { type: 'sfntFromTtc'; data: Uint8Array; index: number }
-  | { type: 'sfntsFromTtc'; data: Uint8Array }
-  | { type: 'ttcFromSfnts'; fonts: Uint8Array[] };
+  | { type: 'unpackTtcAt'; data: Uint8Array; index: number }
+  | { type: 'unpackTtc'; data: Uint8Array }
+  | { type: 'packTtc'; fonts: Uint8Array[] };
 
 export type WorkerRequest = WorkerRequestPayload & { id: number };
+
+export interface LoadedFontPayload {
+  format: ContainerFormat;
+  sfntData: Uint8Array | null;
+  info: FontInfoOutput | null;
+  ttcInfo: TtcInfoOutput | null;
+}
 
 export interface BuildOutputPayload {
   requested: number;
@@ -45,13 +56,16 @@ export interface BuildOutputPayload {
 
 export type WorkerResponse =
   | { id: number; ok: true; type: 'init' }
+  | { id: number; ok: true; type: 'detectFormat'; result: ContainerFormat }
+  | { id: number; ok: true; type: 'toSfnt'; result: Uint8Array }
+  | { id: number; ok: true; type: 'loadFont'; result: LoadedFontPayload }
   | { id: number; ok: true; type: 'inspect'; result: FontInfoOutput }
   | { id: number; ok: true; type: 'convert'; result: Uint8Array }
   | { id: number; ok: true; type: 'build'; result: BuildOutputPayload }
   | { id: number; ok: true; type: 'inspectTtc'; result: TtcInfoOutput }
-  | { id: number; ok: true; type: 'sfntFromTtc'; result: Uint8Array }
-  | { id: number; ok: true; type: 'sfntsFromTtc'; result: Uint8Array[] }
-  | { id: number; ok: true; type: 'ttcFromSfnts'; result: Uint8Array }
+  | { id: number; ok: true; type: 'unpackTtcAt'; result: Uint8Array }
+  | { id: number; ok: true; type: 'unpackTtc'; result: Uint8Array[] }
+  | { id: number; ok: true; type: 'packTtc'; result: Uint8Array }
   | { id: number; ok: false; error: string };
 
 self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
@@ -62,6 +76,51 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
     switch (req.type) {
       case 'init': {
         self.postMessage({ id: req.id, ok: true, type: 'init' } satisfies WorkerResponse);
+        break;
+      }
+      case 'detectFormat': {
+        const result = wasm.detectFormat(req.data);
+        self.postMessage({
+          id: req.id,
+          ok: true,
+          type: 'detectFormat',
+          result,
+        } satisfies WorkerResponse);
+        break;
+      }
+      case 'toSfnt': {
+        const result = wasm.toSfnt(req.data);
+        self.postMessage(
+          { id: req.id, ok: true, type: 'toSfnt', result } satisfies WorkerResponse,
+          { transfer: [result.buffer] },
+        );
+        break;
+      }
+      case 'loadFont': {
+        const format = wasm.detectFormat(req.data);
+        let sfntData: Uint8Array | null = null;
+        let info: FontInfoOutput | null = null;
+        let ttcInfo: TtcInfoOutput | null = null;
+        const transferables: ArrayBuffer[] = [];
+
+        if (format === 'ttf' || format === 'otf') {
+          info = wasm.inspect(req.data);
+        } else if (format === 'woff' || format === 'woff2' || format === 'eot') {
+          const unpacked = wasm.toSfnt(req.data);
+          sfntData = unpacked;
+          info = wasm.inspect(unpacked);
+          if (unpacked.buffer instanceof ArrayBuffer) {
+            transferables.push(unpacked.buffer);
+          }
+        } else if (format === 'ttc') {
+          ttcInfo = wasm.inspectTtc(req.data);
+        }
+
+        const result: LoadedFontPayload = { format, sfntData, info, ttcInfo };
+        self.postMessage(
+          { id: req.id, ok: true, type: 'loadFont', result } satisfies WorkerResponse,
+          { transfer: transferables },
+        );
         break;
       }
       case 'inspect': {
@@ -123,26 +182,26 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
         } satisfies WorkerResponse);
         break;
       }
-      case 'sfntFromTtc': {
-        const result = wasm.sfntFromTtc(req.data, req.index);
+      case 'unpackTtcAt': {
+        const result = wasm.unpackTtcAt(req.data, req.index);
         self.postMessage(
-          { id: req.id, ok: true, type: 'sfntFromTtc', result } satisfies WorkerResponse,
+          { id: req.id, ok: true, type: 'unpackTtcAt', result } satisfies WorkerResponse,
           { transfer: [result.buffer] },
         );
         break;
       }
-      case 'sfntsFromTtc': {
-        const result = wasm.sfntsFromTtc(req.data);
+      case 'unpackTtc': {
+        const result = wasm.unpackTtc(req.data);
         self.postMessage(
-          { id: req.id, ok: true, type: 'sfntsFromTtc', result } satisfies WorkerResponse,
+          { id: req.id, ok: true, type: 'unpackTtc', result } satisfies WorkerResponse,
           { transfer: result.map((item: Uint8Array) => item.buffer) },
         );
         break;
       }
-      case 'ttcFromSfnts': {
-        const result = wasm.ttcFromSfnts(req.fonts);
+      case 'packTtc': {
+        const result = wasm.packTtc(req.fonts);
         self.postMessage(
-          { id: req.id, ok: true, type: 'ttcFromSfnts', result } satisfies WorkerResponse,
+          { id: req.id, ok: true, type: 'packTtc', result } satisfies WorkerResponse,
           { transfer: [result.buffer] },
         );
         break;

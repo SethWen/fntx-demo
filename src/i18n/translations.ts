@@ -39,6 +39,10 @@ export interface Translations {
     };
     inspect: {
       empty: string;
+      containerFormat: string;
+      ttcNotice: string;
+      goToTtc: string;
+      unsupportedNotice: string;
       familyName: string;
       postscriptName: string;
       unitsPerEm: string;
@@ -51,6 +55,12 @@ export interface Translations {
     };
     subset: {
       title: string;
+      cffWarning: string;
+      goToConvert: string;
+      ttcNotice: string;
+      goToTtc: string;
+      unsupportedNotice: string;
+      extraSourceInvalid: string;
       textLabel: string;
       textPlaceholder: string;
       fontNameLabel: string;
@@ -74,6 +84,11 @@ export interface Translations {
     convert: {
       title: string;
       targetFormat: string;
+      currentFormatTag: string;
+      cffUnsupportedHint: string;
+      ttcNotice: string;
+      goToTtc: string;
+      unsupportedNotice: string;
       run: string;
       running: string;
       originalSize: string;
@@ -86,10 +101,13 @@ export interface Translations {
       unpackMode: string;
       packMode: string;
       unpackDesc: string;
+      unpackNotTtc: string;
       packDesc: string;
       inspectBtn: string;
       unpackAllBtn: string;
       unpackOneBtn: string;
+      useFaceBtn: string;
+      packAddCurrent: string;
       packAddFiles: string;
       packBtn: string;
       version: string;
@@ -158,6 +176,10 @@ export const translations: Record<Lang, Translations> = {
       },
       inspect: {
         empty: '请先上传一个单字体文件（TTF/OTF/WOFF/WOFF2/EOT）查看元数据。',
+        containerFormat: '容器格式',
+        ttcNotice: '当前文件为 TTC 字体集合，请前往「TTC 集合」拆解出单个字体后再进行体检或处理。',
+        goToTtc: '前往 TTC 集合',
+        unsupportedNotice: '当前文件格式不支持元数据体检（SVG 仅支持作为输出格式）。',
         familyName: '家族名称 (Family)',
         postscriptName: 'PostScript 名称',
         unitsPerEm: 'UPM (Units Per Em)',
@@ -170,6 +192,14 @@ export const translations: Record<Lang, Translations> = {
       },
       subset: {
         title: '按需提取字符子集（支持多源扩展区合并）',
+        cffWarning:
+          '当前字体为 CFF 轮廓（OTF），暂不支持子集化（仅支持 TrueType 轮廓），可前往格式转换生成 WOFF / WOFF2 / SVG。',
+        goToConvert: '前往格式转换',
+        ttcNotice: '当前文件为 TTC 字体集合，请先在「TTC 集合」提取单个 TrueType 字体。',
+        goToTtc: '前往 TTC 集合',
+        unsupportedNotice: '当前文件格式不支持子集化构建。',
+        extraSourceInvalid:
+          '补充字体源必须是 TrueType (glyf) 单字体（支持 TTF / WOFF / WOFF2 / EOT）。',
         textLabel: '输入需要保留的字符',
         textPlaceholder: '例如：你好世界 fntx 0123456789 𠀀',
         fontNameLabel: '输出字体名称（可选）',
@@ -193,6 +223,11 @@ export const translations: Record<Lang, Translations> = {
       convert: {
         title: '单字体格式互转',
         targetFormat: '目标格式',
+        currentFormatTag: '当前',
+        cffUnsupportedHint: '当前字体为 CFF 轮廓（OTF），暂不支持转换为 TTF 或 EOT。',
+        ttcNotice: '当前文件为 TTC 字体集合，请先在「TTC 集合」提取单个字体后再转换格式。',
+        goToTtc: '前往 TTC 集合',
+        unsupportedNotice: '当前文件格式不支持转换。',
         run: '开始转换',
         running: '正在转换...',
         originalSize: '原始体积',
@@ -204,12 +239,17 @@ export const translations: Record<Lang, Translations> = {
         title: 'TTC 字体集合拆解与打包',
         unpackMode: '拆解 TTC (.ttc -> .ttf/.otf)',
         packMode: '打包 TTC (多字体 -> .ttc)',
-        unpackDesc: '上传 .ttc 文件查看内部包含的子字体与表去重统计，并单独或批量提取。',
-        packDesc: '选择 2 个及以上单字体文件，自动去重共享表并打包为一个 .ttc 集合。',
+        unpackDesc:
+          '上传 .ttc 文件自动解析内部子字体与表去重统计，可提取下载或直接送入工作台处理。',
+        unpackNotTtc: '当前加载的不是 TTC 集合文件；你可以切换到「打包 TTC」将其加入集合。',
+        packDesc:
+          '选择 2 个及以上单字体文件（TTF / OTF / WOFF / WOFF2 / EOT），自动去重共享表并打包为 .ttc。',
         inspectBtn: '解析 TTC 结构',
         unpackAllBtn: '全部拆解提取',
         unpackOneBtn: '提取',
-        packAddFiles: '添加多个单字体文件 (.ttf / .otf)',
+        useFaceBtn: '设为当前字体',
+        packAddCurrent: '加入当前加载的字体',
+        packAddFiles: '添加多个单字体文件 (.ttf / .otf / .woff / .woff2 / .eot)',
         packBtn: '打包为 TTC',
         version: '容器版本',
         fontCount: '子字体数量',
@@ -276,6 +316,11 @@ export const translations: Record<Lang, Translations> = {
       },
       inspect: {
         empty: 'Upload a single font file (TTF/OTF/WOFF/WOFF2/EOT) to inspect its metadata.',
+        containerFormat: 'Container Format',
+        ttcNotice: 'This file is a TTC collection. Open TTC Tools to unpack a face first.',
+        goToTtc: 'Go to TTC Tools',
+        unsupportedNotice:
+          'Metadata inspection is not supported for this format (SVG is output-only).',
         familyName: 'Family Name',
         postscriptName: 'PostScript Name',
         unitsPerEm: 'Units Per Em (UPM)',
@@ -288,6 +333,15 @@ export const translations: Record<Lang, Translations> = {
       },
       subset: {
         title: 'Subset Characters (with optional multi-source merge)',
+        cffWarning:
+          'CFF (OTF) outlines are not supported for subsetting yet (TrueType only). You can convert to WOFF / WOFF2 / SVG instead.',
+        goToConvert: 'Go to Convert',
+        ttcNotice:
+          'This file is a TTC collection. Unpack a single TrueType face in TTC Tools first.',
+        goToTtc: 'Go to TTC Tools',
+        unsupportedNotice: 'This file format is not supported for subsetting.',
+        extraSourceInvalid:
+          'Additional source must be a TrueType (glyf) single font (TTF / WOFF / WOFF2 / EOT).',
         textLabel: 'Characters to keep',
         textPlaceholder: 'e.g. Hello World 你好世界 0123456789 𠀀',
         fontNameLabel: 'Custom Font Name (optional)',
@@ -312,6 +366,11 @@ export const translations: Record<Lang, Translations> = {
       convert: {
         title: 'Font Format Conversion',
         targetFormat: 'Target Format',
+        currentFormatTag: 'Current',
+        cffUnsupportedHint: 'CFF (OTF) outlines cannot be converted to TTF or EOT.',
+        ttcNotice: 'This file is a TTC collection. Unpack a single face in TTC Tools first.',
+        goToTtc: 'Go to TTC Tools',
+        unsupportedNotice: 'This file format is not supported for conversion.',
         run: 'Convert Font',
         running: 'Converting...',
         originalSize: 'Original Size',
@@ -324,13 +383,16 @@ export const translations: Record<Lang, Translations> = {
         unpackMode: 'Unpack TTC (.ttc -> .ttf/.otf)',
         packMode: 'Pack TTC (Fonts -> .ttc)',
         unpackDesc:
-          'Inspect a .ttc collection, view shared table stats, and extract individual or all faces.',
+          'Inspect a .ttc collection automatically, extract faces, or load any face into the workbench.',
+        unpackNotTtc: 'Current file is not a TTC collection. Switch to Pack TTC to include it.',
         packDesc:
-          'Select 2 or more single font files to deduplicate shared tables and pack into a .ttc.',
+          'Select 2 or more single font files (TTF / OTF / WOFF / WOFF2 / EOT) to pack into a .ttc.',
         inspectBtn: 'Inspect TTC',
         unpackAllBtn: 'Unpack All Faces',
         unpackOneBtn: 'Extract',
-        packAddFiles: 'Add font files (.ttf / .otf)',
+        useFaceBtn: 'Use in Workbench',
+        packAddCurrent: 'Add current font',
+        packAddFiles: 'Add font files (.ttf / .otf / .woff / .woff2 / .eot)',
         packBtn: 'Pack into TTC',
         version: 'Version',
         fontCount: 'Face Count',

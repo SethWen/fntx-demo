@@ -11,7 +11,7 @@ import {
   Upload,
   X,
 } from 'lucide-react';
-import type { FontInfoOutput } from '@/vendor/fntx-wasm/index';
+import type { ContainerFormat, FontInfoOutput, TtcInfoOutput } from '@/vendor/fntx-wasm/index';
 import { translations, type Lang } from '../../i18n/translations';
 import { fntxClient, type EngineStatus } from '../../lib/fntx-client';
 import { formatBytes } from '../../lib/format-utils';
@@ -20,7 +20,16 @@ import { InspectPanel } from './InspectPanel';
 import { SubsetPanel } from './SubsetPanel';
 import { TtcPanel } from './TtcPanel';
 
-type TabKey = 'inspect' | 'subset' | 'convert' | 'ttc';
+export type TabKey = 'inspect' | 'subset' | 'convert' | 'ttc';
+
+interface ActiveFont {
+  name: string;
+  data: Uint8Array;
+  format: ContainerFormat;
+  sfntData: Uint8Array | null;
+  info: FontInfoOutput | null;
+  ttcInfo: TtcInfoOutput | null;
+}
 
 interface FontWorkbenchProps {
   lang: Lang;
@@ -34,41 +43,49 @@ export function FontWorkbench({ lang }: FontWorkbenchProps) {
   const [engineStatus, setEngineStatus] = useState<EngineStatus>(() => fntxClient.getStatus());
   const [dragging, setDragging] = useState(false);
 
-  const [activeFile, setActiveFile] = useState<{
-    name: string;
-    ext: string;
-    data: Uint8Array;
-  } | null>(null);
-  const [fontInfo, setFontInfo] = useState<FontInfoOutput | null>(null);
+  const [activeFile, setActiveFile] = useState<ActiveFont | null>(null);
   const [error, setError] = useState('');
 
   useEffect(() => {
     return fntxClient.subscribeStatus(setEngineStatus);
   }, []);
 
-  const loadFontFile = async (file: File) => {
+  const loadFontBytes = async (name: string, data: Uint8Array, nextTab?: TabKey) => {
     setError('');
-    const ext = file.name.split('.').pop()?.toLowerCase() ?? '';
-    const data = new Uint8Array(await file.arrayBuffer());
-    setActiveFile({ name: file.name, ext, data });
-    setFontInfo(null);
-
-    if (ext === 'ttc' || ext === 'otc') {
-      setActiveTab('ttc');
-      return;
-    }
-
     try {
-      const info = await fntxClient.inspect(data);
-      setFontInfo(info);
+      const loaded = await fntxClient.loadFont(data);
+      const effectiveSfnt =
+        loaded.sfntData ?? (loaded.format === 'ttf' || loaded.format === 'otf' ? data : null);
+
+      setActiveFile({
+        name,
+        data,
+        format: loaded.format,
+        sfntData: effectiveSfnt,
+        info: loaded.info,
+        ttcInfo: loaded.ttcInfo,
+      });
+
+      if (loaded.format === 'ttc') {
+        setActiveTab(nextTab ?? 'ttc');
+      } else if (nextTab) {
+        setActiveTab(nextTab);
+      } else if (loaded.format === 'svg' || loaded.format === 'unknown') {
+        setError(t.inspect.unsupportedNotice);
+      }
     } catch (err) {
+      setActiveFile(null);
       setError(err instanceof Error ? err.message : String(err));
     }
   };
 
+  const loadFontFile = async (file: File) => {
+    const data = new Uint8Array(await file.arrayBuffer());
+    await loadFontBytes(file.name, data);
+  };
+
   const handleClear = () => {
     setActiveFile(null);
-    setFontInfo(null);
     setError('');
   };
 
@@ -101,6 +118,18 @@ export function FontWorkbench({ lang }: FontWorkbenchProps) {
     { key: 'convert', label: t.tabs.convert, icon: RefreshCw },
     { key: 'ttc', label: t.tabs.ttc, icon: Layers },
   ];
+
+  const formatBadgeText = (() => {
+    if (!activeFile) return null;
+    const fmt = activeFile.format.toUpperCase();
+    if (activeFile.format === 'ttc' && activeFile.ttcInfo) {
+      return `${fmt} · ${activeFile.ttcInfo.fontCount} ${lang === 'zh' ? '个字体' : 'faces'}`;
+    }
+    if (activeFile.info) {
+      return `${fmt} · ${activeFile.info.isTruetype ? 'TrueType' : 'CFF'}`;
+    }
+    return fmt;
+  })();
 
   return (
     <section className="qv-glass mx-auto max-w-5xl rounded-2xl border border-violet-950/10 p-5 sm:p-6 dark:border-violet-400/15">
@@ -194,8 +223,13 @@ export function FontWorkbench({ lang }: FontWorkbenchProps) {
                 <FileType2 className="h-5 w-5" />
               </div>
               <div>
-                <div className="text-xs text-slate-500 dark:text-slate-400">
-                  {t.dropzone.loaded}
+                <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                  <span>{t.dropzone.loaded}</span>
+                  {formatBadgeText && (
+                    <span className="rounded-md bg-violet-500/12 px-2 py-0.5 text-[11px] font-semibold text-violet-700 dark:bg-violet-400/15 dark:text-violet-300">
+                      {formatBadgeText}
+                    </span>
+                  )}
                 </div>
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   {activeFile.name}{' '}
@@ -239,9 +273,11 @@ export function FontWorkbench({ lang }: FontWorkbenchProps) {
       {activeTab === 'inspect' && (
         <InspectPanel
           lang={lang}
-          info={fontInfo}
+          format={activeFile?.format ?? null}
+          info={activeFile?.info ?? null}
           fileData={activeFile?.data ?? null}
-          fileExt={activeFile?.ext ?? 'ttf'}
+          sfntData={activeFile?.sfntData ?? null}
+          onSwitchTab={setActiveTab}
         />
       )}
       {activeTab === 'subset' && (
@@ -249,7 +285,11 @@ export function FontWorkbench({ lang }: FontWorkbenchProps) {
           lang={lang}
           fileName={activeFile?.name ?? 'font.ttf'}
           fileData={activeFile?.data ?? null}
+          sfntData={activeFile?.sfntData ?? null}
+          format={activeFile?.format ?? null}
+          fontInfo={activeFile?.info ?? null}
           onError={setError}
+          onSwitchTab={setActiveTab}
         />
       )}
       {activeTab === 'convert' && (
@@ -257,7 +297,11 @@ export function FontWorkbench({ lang }: FontWorkbenchProps) {
           lang={lang}
           fileName={activeFile?.name ?? 'font.ttf'}
           fileData={activeFile?.data ?? null}
+          sfntData={activeFile?.sfntData ?? null}
+          format={activeFile?.format ?? null}
+          fontInfo={activeFile?.info ?? null}
           onError={setError}
+          onSwitchTab={setActiveTab}
         />
       )}
       {activeTab === 'ttc' && (
@@ -265,7 +309,11 @@ export function FontWorkbench({ lang }: FontWorkbenchProps) {
           lang={lang}
           activeFileName={activeFile?.name ?? 'collection.ttc'}
           activeFileData={activeFile?.data ?? null}
+          sfntData={activeFile?.sfntData ?? null}
+          format={activeFile?.format ?? null}
+          ttcInfo={activeFile?.ttcInfo ?? null}
           onError={setError}
+          onUseFont={(name, bytes) => void loadFontBytes(name, bytes, 'inspect')}
         />
       )}
     </section>
