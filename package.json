@@ -9,6 +9,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "preview:cf": "pnpm build && wrangler pages dev dist",
+    "deploy": "pnpm check && pnpm build && wrangler pages deploy dist --project-name=fntx",
+    "deploy:preview": "pnpm check && pnpm build && wrangler pages deploy dist --project-name=fntx --branch=preview",
     "astro": "astro",
     "check": "oxlint && oxfmt --check . && tsc -b",
     "lint:check": "oxlint",
@@ -35,6 +38,7 @@
     "@types/react-dom": "^19.3.0",
     "oxfmt": "^0.79.0",
     "oxlint": "^1.94.0",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "wrangler": "^4.166.0"
   }
 }

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://fntx.dev/sitemap-index.xml
+Sitemap: https://fntx.modone.me/sitemap-index.xml

@@ -2,6 +2,7 @@ node_modules/
 dist/
 *.tsbuildinfo
 .astro/
+.wrangler
 .DS_Store
 *.log
 .env

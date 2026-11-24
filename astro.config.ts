@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import viteConfig from './vite.config.ts';
 
 export default defineConfig({
-  site: 'https://fntx.dev',
+  site: 'https://fntx.modone.me',
   integrations: [react(), sitemap()],
   i18n: {
     defaultLocale: 'zh',
