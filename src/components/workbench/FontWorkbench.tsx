@@ -146,9 +146,9 @@ export function FontWorkbench({ lang }: FontWorkbenchProps) {
                   setActiveTab(tab.key);
                   setError('');
                 }}
-                className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-medium transition sm:text-sm ${
+                className={`inline-flex cursor-pointer items-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-medium transition sm:text-sm ${
                   active
-                    ? 'bg-gradient-to-r from-violet-600/20 to-sky-400/20 text-violet-950 shadow-xs ring-1 ring-violet-500/25 dark:from-violet-500/30 dark:to-sky-400/20 dark:text-white dark:ring-violet-400/30'
+                    ? 'bg-linear-to-r from-violet-600/20 to-sky-400/20 text-violet-950 shadow-xs ring-1 ring-violet-500/25 dark:from-violet-500/30 dark:to-sky-400/20 dark:text-white dark:ring-violet-400/30'
                     : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'
                 }`}
               >
