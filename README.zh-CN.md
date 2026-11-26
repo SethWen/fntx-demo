@@ -1,6 +1,6 @@
 <div align="center">
   <img src="./public/favicon.svg" width="72" height="72" alt="fntx logo" />
-  <h1>fntx Web</h1>
+  <h1>Fntx Web</h1>
   <p><strong>纯前端 · 零上传 · WebAssembly 驱动的在线字体处理工作台</strong></p>
   <p>
     在线体验：<a href="https://fntx.modone.me/cn/"><strong>https://fntx.modone.me/cn/</strong></a>
@@ -11,7 +11,7 @@
   </p>
 </div>
 
-**fntx Web** 是基于 [`fntx`](<>) Rust 核心引擎构建的浏览器端在线字体处理工具站。所有字体解析、裁剪、合并与格式转换均在用户浏览器本地 **WebAssembly + Web Worker** 沙箱中完成，无需将动辄数十 MB 的字库上传至任何服务器，兼顾处理速度与文件隐私安全。
+**Fntx Web** 是基于 [`fntx`](<>) Rust 核心引擎构建的浏览器端在线字体处理工具站。所有字体解析、裁剪、合并与格式转换均在用户浏览器本地 **WebAssembly + Web Worker** 沙箱中完成，无需将动辄数十 MB 的字库上传至任何服务器，兼顾处理速度与文件隐私安全。
 
 ---
 

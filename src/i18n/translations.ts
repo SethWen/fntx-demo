@@ -194,7 +194,7 @@ export interface Translations {
 
 export const translations: Record<Lang, Translations> = {
   zh: {
-    siteName: 'fntx Web',
+    siteName: 'Fntx Web',
     siteBadge: '本地处理',
     tagline: '在线字体工具箱：瘦身、转换、合并，全程本地完成',
     nav: {
@@ -271,9 +271,9 @@ export const translations: Record<Lang, Translations> = {
           '用大白话解释字体瘦身、WOFF2、TTF、OTF、TTC、Hinting 等常见术语，附对应工具入口。',
       },
       about: {
-        title: '关于 fntx Web：为什么做这个字体工具 - fntx',
+        title: '关于 Fntx Web：为什么做这个字体工具 - fntx',
         description:
-          '了解 fntx Web 是谁做的、为什么坚持本地处理、如何保证字体文件不上传，以及项目开源与联系方式。',
+          '了解 Fntx Web 是谁做的、为什么坚持本地处理、如何保证字体文件不上传，以及项目开源与联系方式。',
       },
       formats: {
         title: '字体格式对比：TTF、OTF、WOFF2 怎么选？ - fntx',
@@ -435,7 +435,7 @@ export const translations: Record<Lang, Translations> = {
     },
   },
   en: {
-    siteName: 'fntx Web',
+    siteName: 'Fntx Web',
     siteBadge: 'local',
     tagline: 'Free online font toolkit — shrink, convert, merge',
     nav: {
@@ -512,9 +512,9 @@ export const translations: Record<Lang, Translations> = {
           'Plain-language definitions of font subsetting, WOFF2, TTF, OTF, TTC, hinting and other terms, with links to the matching tool.',
       },
       about: {
-        title: 'About fntx Web — Why We Built This Font Tool | fntx',
+        title: 'About Fntx Web — Why We Built This Font Tool | fntx',
         description:
-          'Who builds fntx Web, why it runs entirely in your browser, how your font files stay private, and how to get in touch.',
+          'Who builds Fntx Web, why it runs entirely in your browser, how your font files stay private, and how to get in touch.',
       },
       formats: {
         title: 'Font Formats Explained: TTF vs OTF vs WOFF2 vs TTC | fntx',
