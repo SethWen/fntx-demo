@@ -202,7 +202,7 @@ export const translations: Record<Lang, Translations> = {
       formats: '字体格式',
       guide: '使用指南',
       privacy: '隐私政策',
-      switchLang: 'English',
+      switchLang: 'EN',
       themeToggle: '切换亮暗主题',
     },
     hero: {
@@ -443,7 +443,7 @@ export const translations: Record<Lang, Translations> = {
       formats: 'Font Formats',
       guide: 'Guide',
       privacy: 'Privacy',
-      switchLang: '中文',
+      switchLang: '中',
       themeToggle: 'Toggle Light/Dark Theme',
     },
     hero: {
