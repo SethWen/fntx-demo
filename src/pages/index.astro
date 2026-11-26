@@ -6,35 +6,47 @@ import { translations } from '../i18n/translations';
 
 const lang = 'en';
 const t = translations[lang];
+const githubUrl = import.meta.env.PUBLIC_GITHUB_URL;
+const homeUrl = 'https://fntx.modone.me/';
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
-  name: `${t.siteName} - ${t.tagline}`,
-  url: 'https://fntx.modone.me/',
-  description: t.hero.subtitle,
+  '@id': `${homeUrl}#webapp`,
+  name: t.siteName,
+  alternateName: 'fntx',
+  url: homeUrl,
+  description: t.seo.home.description,
   applicationCategory: 'UtilitiesApplication',
   operatingSystem: 'Any',
   browserRequirements: 'Requires WebAssembly and Web Workers',
+  isAccessibleForFree: true,
+  screenshot: 'https://fntx.modone.me/og/workbench-en.png',
   inLanguage: 'en',
+  featureList: t.home.features.map((feature) => feature.title),
   offers: {
     '@type': 'Offer',
     price: '0',
     priceCurrency: 'USD',
   },
+  ...(githubUrl ? { sameAs: [githubUrl] } : {}),
 };
 ---
 
 <BaseLayout
   lang={lang}
   currentPath="workbench"
-  title={`${t.siteName} - ${t.tagline}`}
-  description={t.hero.subtitle}
+  title={t.seo.home.title}
+  description={t.seo.home.description}
   jsonLd={jsonLd}
 >
   <div class="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
     <div class="mx-auto mb-7 flex max-w-5xl flex-wrap items-end justify-between gap-4">
       <div>
+        <p class="mb-2 inline-flex items-center gap-1.5 rounded-full border border-violet-950/10 bg-white/60 px-2.5 py-1 text-[11px] font-medium text-violet-700 dark:border-violet-400/20 dark:bg-violet-400/10 dark:text-violet-300">
+          <span class="h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden="true"></span>
+          {t.hero.badge}
+        </p>
         <h1 class="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
           {t.hero.title}
         </h1>
@@ -51,29 +63,51 @@ const jsonLd = {
       </div>
     </div>
 
-    <FontWorkbench client:load lang={lang} />
+    <FontWorkbench client:load lang={lang} syncTab />
 
     <AdSlot lang={lang} slotId="home-bottom-en" />
 
-    <section class="mx-auto mt-10 grid max-w-5xl gap-4 sm:grid-cols-3">
-      <div class="qv-glass-card rounded-2xl border border-violet-950/10 p-5 dark:border-violet-400/15">
-        <h2 class="text-sm font-semibold text-slate-900 dark:text-white">Multi-Source Subsetting</h2>
-        <p class="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
-          Subset and merge BMP & SIP supplementary fonts by Unicode range in a single pass with missing codepoint reports.
-        </p>
+    <section class="mx-auto mt-10 max-w-5xl">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white">{t.home.featuresTitle}</h2>
+      <div class="mt-4 grid gap-4 sm:grid-cols-3">
+        {t.home.features.map((feature) => (
+          <div class="qv-glass-card rounded-2xl border border-violet-950/10 p-5 dark:border-violet-400/15">
+            <h3 class="text-sm font-semibold text-slate-900 dark:text-white">{feature.title}</h3>
+            <p class="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
+              {feature.body}
+            </p>
+          </div>
+        ))}
       </div>
-      <div class="qv-glass-card rounded-2xl border border-violet-950/10 p-5 dark:border-violet-400/15">
-        <h2 class="text-sm font-semibold text-slate-900 dark:text-white">Full Format Conversion</h2>
-        <p class="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
-          Convert locally between TTF, WOFF2, WOFF, OTF (quadratic to cubic CFF), EOT, and SVG without uploading files.
-        </p>
-      </div>
-      <div class="qv-glass-card rounded-2xl border border-violet-950/10 p-5 dark:border-violet-400/15">
-        <h2 class="text-sm font-semibold text-slate-900 dark:text-white">TTC Pack & Unpack</h2>
-        <p class="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
-          Inspect shared table stats in TrueType Collections, extract individual faces, or pack multiple fonts with deduplication.
-        </p>
-      </div>
+      <nav aria-label="Tool guides" class="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
+        <a href="/subset/" class="underline hover:text-slate-700 dark:hover:text-slate-200">Shrink font</a>
+        <a href="/convert/" class="underline hover:text-slate-700 dark:hover:text-slate-200">Convert formats</a>
+        <a href="/ttc/" class="underline hover:text-slate-700 dark:hover:text-slate-200">Split or pack collections</a>
+        <a href="/glossary/" class="underline hover:text-slate-700 dark:hover:text-slate-200">Font glossary</a>
+      </nav>
+    </section>
+
+    <section class="mx-auto mt-10 max-w-5xl">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white">{t.home.stepsTitle}</h2>
+      <ol class="mt-4 grid gap-4 sm:grid-cols-3">
+        {t.home.steps.map((step, index) => (
+          <li class="qv-glass-card rounded-2xl border border-violet-950/10 p-5 dark:border-violet-400/15">
+            <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-violet-500/12 text-xs font-semibold text-violet-700 dark:bg-violet-400/15 dark:text-violet-300">
+              {index + 1}
+            </span>
+            <h3 class="mt-2 text-sm font-semibold text-slate-900 dark:text-white">{step.title}</h3>
+            <p class="mt-1 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
+              {step.body}
+            </p>
+          </li>
+        ))}
+      </ol>
+      <p class="mt-4 text-xs text-slate-500 dark:text-slate-400">
+        Not sure which format to pick?{' '}
+        <a href="/formats/" class="underline hover:text-slate-700 dark:hover:text-slate-200">Compare font formats</a>{' '}
+        or read the{' '}
+        <a href="/guide/" class="underline hover:text-slate-700 dark:hover:text-slate-200">step-by-step guide</a>.
+      </p>
     </section>
   </div>
 </BaseLayout>

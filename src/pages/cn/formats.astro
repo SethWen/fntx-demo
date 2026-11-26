@@ -1,70 +1,183 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import AdSlot from '../../components/AdSlot.astro';
+import { translations } from '../../i18n/translations';
+
+const t = translations.zh;
+const url = 'https://fntx.modone.me/cn/formats/';
+const homeUrl = 'https://fntx.modone.me/cn/';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'TechArticle',
+    '@id': `${url}#article`,
+    headline: '字体格式怎么选？一张表看懂',
+    description: t.seo.formats.description,
+    url,
+    inLanguage: 'zh-CN',
+    datePublished: '2026-11-26',
+    dateModified: '2026-11-26',
+    author: { '@id': 'https://fntx.modone.me/#organization' },
+    mainEntityOfPage: { '@id': `${url}#webpage` },
+    isPartOf: { '@id': 'https://fntx.modone.me/#website' },
+    about: [
+      { '@type': 'Thing', name: 'WOFF2' },
+      { '@type': 'Thing', name: 'TTF' },
+      { '@type': 'Thing', name: 'OTF' },
+      { '@type': 'Thing', name: 'TTC 字体合集' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '首页', item: homeUrl },
+      { '@type': 'ListItem', position: 2, name: '字体格式对比', item: url },
+    ],
+  },
+];
 ---
 
 <BaseLayout
   lang="zh"
   currentPath="formats"
-  title="字体格式科普：TTF、WOFF2、OTF、EOT、SVG 与 TTC 区别 - fntx Web"
-  description="详细对比 Web 与桌面常见字体格式（TTF、WOFF2、WOFF、OTF、EOT、SVG、TTC）的压缩率、轮廓曲线与适用场景。"
+  title={t.seo.formats.title}
+  description={t.seo.formats.description}
+  jsonLd={jsonLd}
 >
-  <article class="mx-auto max-w-4xl space-y-6 px-4 py-10 sm:px-6">
-    <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">常见字体格式对比与选型指南</h1>
-    <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-      在网页前端、移动应用与桌面排版中，选择合适的字体格式与子集化策略可以显著降低页面加载体积（中文字库常可从 20MB 压缩至几十 KB）。
-    </p>
+  <article class="mx-auto max-w-4xl space-y-8 px-4 py-10 text-slate-600 sm:px-6 dark:text-slate-400">
+    <Breadcrumbs items={[{ label: t.breadcrumb.home, href: homeUrl }, { label: t.footer.links.formats }]} />
+
+    <header class="space-y-3">
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+        字体格式怎么选？一张表看懂
+      </h1>
+      <p class="text-sm leading-relaxed">
+        字体文件有好几种格式，选错了会让网页白白变重。先记住一句话：做网页用
+        <strong>WOFF2</strong>，装到电脑或 App 里用 <strong>TTF</strong>，印刷设计常用
+        <strong>OTF</strong>，一个文件里装着好几套字体则多半是 <strong>TTC</strong>。
+      </p>
+    </header>
 
     <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/60">
       <table class="w-full text-left text-xs sm:text-sm">
         <thead class="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
           <tr>
-            <th class="px-4 py-3 font-semibold">格式</th>
-            <th class="px-4 py-3 font-semibold">压缩算法</th>
-            <th class="px-4 py-3 font-semibold">典型用途</th>
-            <th class="px-4 py-3 font-semibold">建议</th>
+            <th class="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">格式</th>
+            <th class="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">一句话理解</th>
+            <th class="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">适合用在哪</th>
+            <th class="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">建议</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
           <tr>
             <td class="px-4 py-3 font-mono font-semibold">WOFF2</td>
-            <td class="px-4 py-3">Brotli + 表预处理</td>
-            <td class="px-4 py-3">现代 Web 首选字体格式</td>
-            <td class="px-4 py-3 text-emerald-600 dark:text-emerald-400">强烈推荐用于网页</td>
+            <td class="px-4 py-3">专门为网页压缩过的字体，通常下载体积最小。</td>
+            <td class="px-4 py-3">现代网站</td>
+            <td class="px-4 py-3 text-emerald-600 dark:text-emerald-400">做网页首选</td>
           </tr>
           <tr>
             <td class="px-4 py-3 font-mono font-semibold">WOFF</td>
-            <td class="px-4 py-3">zlib / DEFLATE</td>
-            <td class="px-4 py-3">兼容老版本浏览器</td>
-            <td class="px-4 py-3">作降级备选</td>
+            <td class="px-4 py-3">上一代网页格式，思路相同，但比 WOFF2 更大。</td>
+            <td class="px-4 py-3">老旧浏览器</td>
+            <td class="px-4 py-3">只作备用</td>
           </tr>
           <tr>
             <td class="px-4 py-3 font-mono font-semibold">TTF</td>
-            <td class="px-4 py-3">无（原始 SFNT）</td>
-            <td class="px-4 py-3">系统安装、App 内嵌、源字库</td>
-            <td class="px-4 py-3">桌面/App 通用</td>
+            <td class="px-4 py-3">最常见、没有额外压缩的原始字体文件。</td>
+            <td class="px-4 py-3">装系统、App 内嵌、继续编辑</td>
+            <td class="px-4 py-3">通用格式</td>
           </tr>
           <tr>
             <td class="px-4 py-3 font-mono font-semibold">OTF</td>
-            <td class="px-4 py-3">CFF 三次贝塞尔</td>
-            <td class="px-4 py-3">专业印刷排版与设计软件</td>
-            <td class="px-4 py-3">fntx 支持 TTF 与 OTF 互转</td>
+            <td class="px-4 py-3">偏印刷设计的字体，字形绘制方式与 TTF 不同。</td>
+            <td class="px-4 py-3">专业设计与印刷</td>
+            <td class="px-4 py-3">印刷用它，网页先转格式</td>
           </tr>
           <tr>
             <td class="px-4 py-3 font-mono font-semibold">TTC</td>
-            <td class="px-4 py-3">多字体表去重共享</td>
-            <td class="px-4 py-3">系统家族字体打包（如宋体/新宋体）</td>
-            <td class="px-4 py-3">可用 TTC 工具拆解提取</td>
+            <td class="px-4 py-3">一个文件装好几套字体，公共数据只存一份。</td>
+            <td class="px-4 py-3">一起发布的字体家族</td>
+            <td class="px-4 py-3">用「字体合集」拆开或打包</td>
           </tr>
           <tr>
             <td class="px-4 py-3 font-mono font-semibold">EOT / SVG</td>
-            <td class="px-4 py-3">历史兼容格式</td>
-            <td class="px-4 py-3">极老旧 IE / 早期移动端兼容</td>
-            <td class="px-4 py-3">仅遗留系统需要</td>
+            <td class="px-4 py-3">很老的浏览器才用的历史格式。</td>
+            <td class="px-4 py-3">老 IE 与遗留系统</td>
+            <td class="px-4 py-3">今天基本不需要</td>
           </tr>
         </tbody>
       </table>
     </div>
+
+    <section class="space-y-3">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white">WOFF2 和 TTF 有什么区别？</h2>
+      <p class="text-sm leading-relaxed">
+        TTF 是原始字体文件，没有为下载做额外压缩，好处是哪儿都能用，适合作为母版。WOFF2
+        里装的是同一套字形，但文件被打包得更紧，浏览器收到后再解开，所以网页加载更快。
+      </p>
+      <p class="text-sm leading-relaxed">
+        给网页用就选 WOFF2；装到电脑软件里、放进 App，或者以后还要改字体，就留一份 TTF。
+        不用二选一，
+        <a href="/cn/convert/" class="underline hover:text-slate-900 dark:hover:text-slate-100">格式转换</a>
+        可以在两者之间互转。
+      </p>
+    </section>
+
+    <section class="space-y-3">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white">TTF 和 OTF 哪个好？</h2>
+      <p class="text-sm leading-relaxed">
+        没有绝对的“更好”。TTF 用一种方式画曲线，OTF 常用另一种，后者在专业印刷字体里更常见。
+        大多数网站只需要 TTF 或 WOFF2，而设计和印刷流程往往从 OTF 开始。
+      </p>
+      <p class="text-sm leading-relaxed">
+        一个实际差别：这个工作台可以直接给 TTF 类型的字体瘦身，而采用 CFF 轮廓的 OTF
+        需要先转成 TTF。拿不准时，保留原文件，再另存一份网页用的版本。
+      </p>
+    </section>
+
+    <section class="space-y-3">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white">TTC 字体合集是什么？</h2>
+      <p class="text-sm leading-relaxed">
+        TTC 是“字体合集”的缩写。它把好几套字体装进一个文件，相同的数据只保存一次，所以比分别
+        存成多个文件更省空间。系统里的常规体、粗体等家族字体有时就是这样发布的。只需要其中一套
+        时可以
+        <a href="/cn/ttc/" class="underline hover:text-slate-900 dark:hover:text-slate-100">先拆开</a>；想把多套字体一起发布时，打包成合集也能省空间。
+      </p>
+    </section>
+
+    <section class="space-y-3">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white">
+        什么时候还需要 EOT / SVG？
+      </h2>
+      <p class="text-sm leading-relaxed">
+        现代网站基本不需要。EOT 是给很老的 IE 用的，SVG 字体则是早期移动浏览器的临时方案。
+        这里保留它们只是为了照顾遗留项目；新网站用 WOFF2 就够了，最多再留一个 WOFF 备用。
+      </p>
+    </section>
+
+    <aside class="rounded-2xl border border-violet-950/10 bg-violet-500/5 p-5 text-sm dark:border-violet-400/15">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">选型速查</h2>
+      <ul class="mt-2 list-disc space-y-1 pl-5">
+        <li>做网页 → WOFF2</li>
+        <li>装电脑、放进 App 或留母版 → TTF</li>
+        <li>印刷设计 → OTF</li>
+        <li>多套字体装一个文件 → TTC</li>
+      </ul>
+      <p class="mt-3 text-xs">
+        字体文件自带授权条款。瘦身、转换或再分发之前，请先确认你有相应使用权。
+      </p>
+    </aside>
+
+    <p class="text-sm">
+      想直接试试？打开
+      <a href="/cn/" class="underline hover:text-slate-900 dark:hover:text-slate-100">字体工作台</a>
+      ，或阅读
+      <a href="/cn/guide/" class="underline hover:text-slate-900 dark:hover:text-slate-100">使用指南</a>。
+    </p>
 
     <AdSlot lang="zh" slotId="formats-bottom" />
   </article>

@@ -1,0 +1,165 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { translations } from '../i18n/translations';
+
+const t = translations.en;
+const url = 'https://fntx.modone.me/glossary/';
+const homeUrl = 'https://fntx.modone.me/';
+
+const terms = [
+  {
+    name: 'Font subsetting',
+    definition:
+      'Keeping only the characters a page actually uses and removing the rest, so the font file gets smaller. The shapes you keep do not change. Tool: Shrink font.',
+    href: '/subset/',
+    linkLabel: 'Shrink font',
+  },
+  {
+    name: 'Font collection (TTC)',
+    definition:
+      'A single file that holds several fonts and stores shared data only once. You can split it into individual fonts or pack several fonts into one. Tool: Collections.',
+    href: '/ttc/',
+    linkLabel: 'Collections',
+  },
+  {
+    name: 'WOFF2',
+    definition:
+      'A font format designed for web downloads, usually the most compressed. Browsers unpack it automatically, so the rendering matches the original. First choice for websites.',
+    href: '/convert/',
+    linkLabel: 'Convert formats',
+  },
+  {
+    name: 'WOFF',
+    definition:
+      'The previous web font format. Same idea as WOFF2, but usually larger. Today it is mainly a fallback for old browsers.',
+  },
+  {
+    name: 'TTF',
+    definition:
+      'The most common, uncompressed font file. Almost every system and app can use it — good for installing, embedding in apps, or keeping as an editable master.',
+  },
+  {
+    name: 'OTF',
+    definition:
+      'A format common in professional design and print. It describes curves differently from TTF. Convert it to TTF or WOFF2 before using it on a website.',
+  },
+  {
+    name: 'EOT / SVG fonts',
+    definition:
+      'Two legacy formats for very old Internet Explorer and early mobile browsers. Modern sites rarely need them.',
+  },
+  {
+    name: 'Glyph',
+    definition:
+      'The actual drawing of a character. The same character can look different in different fonts. “Glyph count” in the inspector means how many of these drawings the file contains.',
+  },
+  {
+    name: 'Character and code point (Unicode)',
+    definition:
+      'A character is “which letter”; a code point is its number in the Unicode standard, for example “A” is U+0041. Fonts map code points to glyphs.',
+  },
+  {
+    name: 'Hinting',
+    definition:
+      'Small instructions inside a font that help text stay sharp at tiny sizes or on low-resolution screens. Removing them makes the file smaller, with a slight risk on old displays.',
+  },
+  {
+    name: 'Outlines',
+    definition:
+      'The curves that draw a glyph. TrueType uses quadratic curves; CFF (common in OTF) uses cubic curves. This is why some fonts cannot be shrunk directly.',
+  },
+  {
+    name: 'UPM (units per em)',
+    definition:
+      'The internal coordinate grid a font uses to draw glyphs. It is not the same as pixels; most people never need to change it.',
+  },
+  {
+    name: 'Rare characters (BMP / SIP)',
+    definition:
+      'BMP is the basic range that holds common characters; SIP and higher planes hold many rare ones. If your main font lacks a character, add another font that contains it and merge the results.',
+    href: '/guide/',
+    linkLabel: 'How to add rare characters',
+  },
+  {
+    name: 'Font license',
+    definition:
+      'The copyright and usage terms that come with a font. Check that subsetting, conversion, packing or redistribution is allowed before you publish the result.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    '@id': `${url}#terms`,
+    name: 'Font Glossary',
+    url,
+    inLanguage: 'en',
+    hasDefinedTerm: terms.map((term) => ({
+      '@type': 'DefinedTerm',
+      name: term.name,
+      description: term.definition,
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: homeUrl },
+      { '@type': 'ListItem', position: 2, name: 'Font glossary', item: url },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  lang="en"
+  currentPath="glossary"
+  title={t.seo.glossary.title}
+  description={t.seo.glossary.description}
+  jsonLd={jsonLd}
+>
+  <article class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <Breadcrumbs items={[{ label: t.breadcrumb.home, href: homeUrl }, { label: t.footer.links.glossary }]} />
+
+    <header class="mt-4 space-y-3">
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+        Font Glossary, in Plain Language
+      </h1>
+      <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+        Look up a font term here. Each entry explains it in one sentence and points you to the tool
+        that handles it.
+      </p>
+    </header>
+
+    <dl class="mt-8 space-y-4">
+      {terms.map((term) => (
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900/60">
+          <dt class="text-base font-semibold text-slate-900 dark:text-white">{term.name}</dt>
+          <dd class="mt-1.5 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+            {term.definition}
+            {term.href && (
+              <>
+                {' '}
+                <a href={term.href} class="underline hover:text-slate-900 dark:hover:text-slate-100">
+                  {term.linkLabel}
+                </a>
+              </>
+            )}
+          </dd>
+        </div>
+      ))}
+    </dl>
+
+    <p class="mt-6 text-xs text-slate-500 dark:text-slate-400">
+      For format selection advice, see{' '}
+      <a href="/formats/" class="underline hover:text-slate-700 dark:hover:text-slate-200">font format comparison</a>, or open the{' '}
+      <a href="/" class="underline hover:text-slate-700 dark:hover:text-slate-200">font workbench</a>.
+    </p>
+
+    <AdSlot lang="en" slotId="glossary-bottom-en" />
+  </article>
+</BaseLayout>

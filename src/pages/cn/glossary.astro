@@ -1,0 +1,165 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { translations } from '../../i18n/translations';
+
+const t = translations.zh;
+const url = 'https://fntx.modone.me/cn/glossary/';
+const homeUrl = 'https://fntx.modone.me/cn/';
+
+const terms = [
+  {
+    name: '字体瘦身（子集化）',
+    definition:
+      '只保留网页实际用到的字，把其余字符去掉，从而让字体文件变小。原来的字形不会改变。相关工具：字体瘦身。',
+    href: '/cn/subset/',
+    linkLabel: '字体瘦身',
+  },
+  {
+    name: '字体合集（TTC）',
+    definition:
+      '一个文件里装着好几套字体，相同的数据只保存一次。可以拆成单个字体，也可以把多个字体打包成合集。相关工具：字体合集。',
+    href: '/cn/ttc/',
+    linkLabel: '字体合集',
+  },
+  {
+    name: 'WOFF2',
+    definition:
+      '专门为网页下载设计的字体格式，压缩率通常最高。浏览器下载后会自动解开，显示效果和原字体一致。做网页优先选它。',
+    href: '/cn/convert/',
+    linkLabel: '格式转换',
+  },
+  {
+    name: 'WOFF',
+    definition:
+      '上一代网页字体格式，思路和 WOFF2 相同，但文件通常更大。现在主要给很老的浏览器做备用。',
+  },
+  {
+    name: 'TTF',
+    definition:
+      '最常见、没有额外压缩的字体文件，几乎所有系统和软件都能用。适合安装、放进 App，或作为继续编辑的母版。',
+  },
+  {
+    name: 'OTF',
+    definition:
+      '常见于专业设计和印刷的字体格式，字形绘制方式与 TTF 不同。做网页前通常需要先转换成 TTF 或 WOFF2。',
+  },
+  {
+    name: 'EOT / SVG 字体',
+    definition:
+      '两种历史格式，分别服务于很老的 IE 和早期移动浏览器。现代网站基本不再需要。',
+  },
+  {
+    name: '字形（Glyph）',
+    definition:
+      '一个字具体长什么样。同一个字在不同字体里有不同的字形。字体体检里的“字形数量”指的是文件里画了多少个这样的形状。',
+  },
+  {
+    name: '字符与码点（Unicode）',
+    definition:
+      '字符是“哪个字”，码点是它在 Unicode 标准里的编号，例如“你”是 U+4F60。字体通过码点把文字对应到字形。',
+  },
+  {
+    name: 'Hinting',
+    definition:
+      '字体里附带的小提示，帮助文字在很小字号或低分辨率屏幕上保持清晰。去掉它可以让文件更小，但在老旧屏幕上可能略微影响清晰度。',
+  },
+  {
+    name: '轮廓（Outline）',
+    definition:
+      '字形的外框曲线。TrueType 用二次曲线描述，CFF（常见于 OTF）用三次曲线描述。这也是有些字体不能直接瘦身的原因。',
+  },
+  {
+    name: 'UPM（设计单位）',
+    definition:
+      'Units Per Em，字体内部用来画字的坐标格大小。它不直接等于像素，普通用户通常不需要关心。',
+  },
+  {
+    name: '生僻字（BMP / SIP）',
+    definition:
+      'BMP 是常用字符所在的基本区，SIP 及更高平面包含很多生僻字。主字体没有的字，可以从另一个字库补充进来再合并。',
+    href: '/cn/guide/',
+    linkLabel: '补充生僻字的方法',
+  },
+  {
+    name: '字体授权',
+    definition:
+      '字体文件自带的版权和使用条款。瘦身、转换、打包或再分发之前，请先确认授权允许这些操作。',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    '@id': `${url}#terms`,
+    name: '字体术语词典',
+    url,
+    inLanguage: 'zh-CN',
+    hasDefinedTerm: terms.map((term) => ({
+      '@type': 'DefinedTerm',
+      name: term.name,
+      description: term.definition,
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '首页', item: homeUrl },
+      { '@type': 'ListItem', position: 2, name: '字体术语词典', item: url },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  lang="zh"
+  currentPath="glossary"
+  title={t.seo.glossary.title}
+  description={t.seo.glossary.description}
+  jsonLd={jsonLd}
+>
+  <article class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <Breadcrumbs items={[{ label: t.breadcrumb.home, href: homeUrl }, { label: t.footer.links.glossary }]} />
+
+    <header class="mt-4 space-y-3">
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+        字体术语词典（人话版）
+      </h1>
+      <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+        遇到看不懂的字体名词时来这里查。每个词先用一句话说清楚，再告诉你去哪个工具处理。
+      </p>
+    </header>
+
+    <dl class="mt-8 space-y-4">
+      {terms.map((term) => (
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900/60">
+          <dt class="text-base font-semibold text-slate-900 dark:text-white">{term.name}</dt>
+          <dd class="mt-1.5 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+            {term.definition}
+            {term.href && (
+              <>
+                {' '}
+                <a href={term.href} class="underline hover:text-slate-900 dark:hover:text-slate-100">
+                  {term.linkLabel}
+                </a>
+              </>
+            )}
+          </dd>
+        </div>
+      ))}
+    </dl>
+
+    <p class="mt-6 text-xs text-slate-500 dark:text-slate-400">
+      想了解各格式的选型建议，可以看
+      <a href="/cn/formats/" class="underline hover:text-slate-700 dark:hover:text-slate-200">字体格式对比</a>
+      ，或直接打开
+      <a href="/cn/" class="underline hover:text-slate-700 dark:hover:text-slate-200">字体工作台</a>。
+    </p>
+
+    <AdSlot lang="zh" slotId="glossary-bottom" />
+  </article>
+</BaseLayout>

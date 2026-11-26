@@ -1,0 +1,140 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { FontWorkbench } from '../../components/workbench/FontWorkbench';
+import { translations } from '../../i18n/translations';
+
+const t = translations.zh;
+const url = 'https://fntx.modone.me/cn/ttc/';
+const homeUrl = 'https://fntx.modone.me/cn/';
+const webappId = 'https://fntx.modone.me/cn/#webapp';
+
+const faqs = [
+  {
+    question: 'TTC 和普通字体文件有什么区别？',
+    answer:
+      'TTC 是一个“字体合集”，里面装着好几套字体，相同的数据只保存一次。普通字体文件通常只包含一套字体。',
+  },
+  {
+    question: '拆开后字体会变形吗？',
+    answer:
+      '不会。拆开只是把合集里的某一套字体单独取出来，字形和排版数据都保持不变。',
+  },
+  {
+    question: '打包能让文件变小吗？',
+    answer:
+      '几套字体之间如果有重复数据，打包时只会存一份，所以可能比多个独立文件加起来更小。能省多少取决于字体之间的相似程度。',
+  },
+  {
+    question: '能从合集里只取一套字体吗？',
+    answer:
+      '可以。先检查合集，确认里面有哪些字体，再提取需要的那一套；也可以一次全部导出。',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: t.seo.ttc.title,
+    description: t.seo.ttc.description,
+    inLanguage: 'zh-CN',
+    isPartOf: { '@id': 'https://fntx.modone.me/#website' },
+    mainEntity: { '@id': webappId },
+    breadcrumb: { '@id': `${url}#breadcrumb` },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '首页', item: homeUrl },
+      { '@type': 'ListItem', position: 2, name: '字体合集', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout
+  lang="zh"
+  currentPath="ttc"
+  title={t.seo.ttc.title}
+  description={t.seo.ttc.description}
+  jsonLd={jsonLd}
+>
+  <div class="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
+    <Breadcrumbs items={[{ label: t.breadcrumb.home, href: homeUrl }, { label: t.footer.links.ttc }]} />
+
+    <header class="mt-4 max-w-3xl space-y-3">
+      <h1 class="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+        TTC 拆分与打包：处理字体合集
+      </h1>
+      <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+        有些字体文件里装着好几套字体，这种文件叫 TTC 合集。这里可以把其中一套拆出来单独使用，也可以把多个字体打包成一个合集，重复的数据只保存一份。
+      </p>
+    </header>
+
+    <div class="mt-6">
+      <FontWorkbench client:load lang="zh" initialTab="ttc" />
+    </div>
+
+    <article class="mx-auto mt-10 max-w-3xl space-y-8 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+      <section class="space-y-3">
+        <h2 class="text-lg font-semibold text-slate-900 dark:text-white">拆开合集</h2>
+        <ol class="list-decimal space-y-1 pl-5">
+          <li>拖入 .ttc 文件，工作台会自动切到「字体合集」。</li>
+          <li>点「看看里面有什么」，确认包含哪些字体。</li>
+          <li>提取需要的字体，或点「用此字体继续处理」直接去瘦身、转格式。</li>
+        </ol>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-lg font-semibold text-slate-900 dark:text-white">打包合集</h2>
+        <ol class="list-decimal space-y-1 pl-5">
+          <li>切到「打包合集」，添加两个或更多字体文件。</li>
+          <li>点「打包成一个文件」。</li>
+          <li>下载生成的 .ttc 文件。</li>
+        </ol>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-lg font-semibold text-slate-900 dark:text-white">常见问题</h2>
+        {faqs.map((faq) => (
+          <div class="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900/60">
+            <h3 class="text-sm font-semibold text-slate-900 dark:text-white">{faq.question}</h3>
+            <p class="mt-1.5 text-xs">{faq.answer}</p>
+          </div>
+        ))}
+      </section>
+
+      <section class="space-y-2">
+        <h2 class="text-lg font-semibold text-slate-900 dark:text-white">相关工具</h2>
+        <p>
+          拆出来的字体太大？用
+          <a href="/cn/subset/" class="underline hover:text-slate-900 dark:hover:text-slate-100">字体瘦身</a>。
+          想换成网页格式？用
+          <a href="/cn/convert/" class="underline hover:text-slate-900 dark:hover:text-slate-100">格式转换</a>。
+          想了解 TTC 与其他格式的区别，可以看
+          <a href="/cn/formats/" class="underline hover:text-slate-900 dark:hover:text-slate-100">字体格式对比</a>。
+        </p>
+        <p class="text-xs text-slate-500">
+          字体文件自带授权条款。拆分、打包和再分发之前，请先确认你有相应使用权。
+        </p>
+      </section>
+    </article>
+
+    <AdSlot lang="zh" slotId="ttc-bottom" />
+  </div>
+</BaseLayout>

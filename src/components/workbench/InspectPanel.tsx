@@ -56,38 +56,50 @@ export function InspectPanel({
     );
   }
 
-  const rows: Array<{ label: string; value: string }> = [
-    { label: t.containerFormat, value: format.toUpperCase() },
+  const basicRows: Array<{ label: string; value: string }> = [
     { label: t.familyName, value: info.familyName || '-' },
+    { label: t.containerFormat, value: format.toUpperCase() },
+    { label: t.codepointCount, value: info.codepointCount.toLocaleString() },
+    { label: t.fileSize, value: formatBytes(fileData.byteLength) },
+  ];
+
+  const advancedRows: Array<{ label: string; value: string }> = [
     { label: t.postscriptName, value: info.postscriptName || '-' },
     { label: t.unitsPerEm, value: String(info.unitsPerEm) },
     { label: t.glyphCount, value: info.glyphCount.toLocaleString() },
-    { label: t.codepointCount, value: info.codepointCount.toLocaleString() },
     { label: t.outlineType, value: info.isTruetype ? t.truetype : t.cff },
-    { label: t.fileSize, value: formatBytes(fileData.byteLength) },
   ];
 
   const previewBytes = sfntData ?? fileData;
   const previewFormat = info.isTruetype ? 'ttf' : 'otf';
 
+  const renderRow = (row: { label: string; value: string }) => (
+    <div
+      key={row.label}
+      className="rounded-xl border border-slate-200/80 bg-slate-50/70 p-3.5 dark:border-slate-800 dark:bg-slate-900/50"
+    >
+      <div className="text-xs text-slate-500 dark:text-slate-400">{row.label}</div>
+      <div
+        className="mt-1 truncate text-sm font-semibold text-slate-900 dark:text-slate-100"
+        title={row.value}
+      >
+        {row.value}
+      </div>
+    </div>
+  );
+
   return (
     <div>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {rows.map((row) => (
-          <div
-            key={row.label}
-            className="rounded-xl border border-slate-200/80 bg-slate-50/70 p-3.5 dark:border-slate-800 dark:bg-slate-900/50"
-          >
-            <div className="text-xs text-slate-500 dark:text-slate-400">{row.label}</div>
-            <div
-              className="mt-1 truncate text-sm font-semibold text-slate-900 dark:text-slate-100"
-              title={row.value}
-            >
-              {row.value}
-            </div>
-          </div>
-        ))}
-      </div>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{basicRows.map(renderRow)}</div>
+
+      <details className="group mt-3 rounded-xl border border-slate-200/80 bg-white/40 p-3.5 dark:border-slate-800 dark:bg-slate-900/30">
+        <summary className="cursor-pointer text-xs font-medium text-slate-600 marker:text-violet-500 dark:text-slate-300">
+          {t.advancedParams}
+        </summary>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {advancedRows.map(renderRow)}
+        </div>
+      </details>
 
       <FontPreview fontBytes={previewBytes} format={previewFormat} lang={lang} />
     </div>

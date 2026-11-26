@@ -3,6 +3,7 @@ import { Download, Info, Layers, Loader2, RefreshCw } from 'lucide-react';
 import type { ContainerFormat, FontFormat, FontInfoOutput } from '@/vendor/fntx-wasm/index';
 import { translations, type Lang } from '../../i18n/translations';
 import { fntxClient } from '../../lib/fntx-client';
+import { friendlyError } from '../../lib/error-utils';
 import { downloadBytes, formatBytes, stripExtension } from '../../lib/format-utils';
 import { FontPreview } from './FontPreview';
 import type { TabKey } from './FontWorkbench';
@@ -63,7 +64,7 @@ export function ConvertPanel({
       const converted = await fntxClient.convert(sfntData, effectiveTarget);
       setOutputState({ source: fileData, format: effectiveTarget, data: converted });
     } catch (err) {
-      onError(err instanceof Error ? err.message : String(err));
+      onError(friendlyError(err, lang));
     } finally {
       setBusy(false);
     }
@@ -148,6 +149,7 @@ export function ConvertPanel({
               );
             })}
           </div>
+          <p className="mt-2 text-[11px] text-slate-500 dark:text-slate-400">{t.formatsHint}</p>
         </div>
 
         <button

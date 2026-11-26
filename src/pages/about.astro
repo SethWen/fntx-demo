@@ -1,0 +1,126 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { translations } from '../i18n/translations';
+
+const t = translations.en;
+const githubUrl = import.meta.env.PUBLIC_GITHUB_URL;
+const url = 'https://fntx.modone.me/about/';
+const homeUrl = 'https://fntx.modone.me/';
+const orgId = 'https://fntx.modone.me/#organization';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: t.seo.about.title,
+    description: t.seo.about.description,
+    inLanguage: 'en',
+    mainEntity: { '@id': orgId },
+    isPartOf: { '@id': 'https://fntx.modone.me/#website' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: homeUrl },
+      { '@type': 'ListItem', position: 2, name: 'About', item: url },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  lang="en"
+  currentPath="about"
+  title={t.seo.about.title}
+  description={t.seo.about.description}
+  jsonLd={jsonLd}
+>
+  <article class="mx-auto max-w-3xl space-y-6 px-4 py-10 text-sm leading-relaxed text-slate-600 sm:px-6 dark:text-slate-400">
+    <Breadcrumbs items={[{ label: t.breadcrumb.home, href: homeUrl }, { label: t.footer.links.about }]} />
+
+    <header class="space-y-2">
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+        About fntx Web
+      </h1>
+      <p class="text-xs text-slate-500">Last updated: November 26, 2026</p>
+    </header>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">Why this exists</h2>
+      <p>
+        Font files are often far larger than a website needs, and the formats are confusing. Most
+        online tools solve this by asking you to upload the file to a server. For a paid or
+        custom-made font, that is a hard thing to agree to.
+      </p>
+      <p>
+        fntx Web takes the other path: everything runs inside your browser. You can shrink, convert
+        and merge fonts without handing them to anyone.
+      </p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">What you can do here</h2>
+      <ul class="list-disc space-y-1 pl-5">
+        <li>Inspect a font: name, format, character coverage, size.</li>
+        <li>Shrink a font to only the characters your page uses.</li>
+        <li>Convert between TTF, WOFF2, WOFF, OTF, EOT and SVG.</li>
+        <li>Split a font collection (TTC) into single fonts, or pack fonts into one.</li>
+      </ul>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">Why everything stays local</h2>
+      <p>
+        Your font is loaded into the browser’s memory and processed there. Nothing is uploaded, and
+        generated files are created on your device. This is a design choice, not a setting: there is
+        no upload endpoint to disable.
+      </p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">How it works</h2>
+      <p>
+        The processing engine is written in Rust, compiled to WebAssembly, and runs in a background
+        Web Worker so large fonts do not freeze the page. The site itself is a static build, which
+        keeps hosting simple and fast.
+      </p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">Honest limits</h2>
+      <ul class="list-disc space-y-1 pl-5">
+        <li>Very large CJK fonts can use a lot of memory. On phones, close other tabs first.</li>
+        <li>Conversion changes the container, not the design. It cannot add glyphs a font never had.</li>
+        <li>Results depend on the source font. Keeping a backup of the original is always wise.</li>
+        <li>Font licenses still apply. Check that shrinking, converting or republishing is allowed.</li>
+      </ul>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">Open source and contact</h2>
+      <p>
+        fntx Web is an independent open-source project. The code, issue tracker and release history
+        live on GitHub, which is also the best place to report a bug or suggest a feature.
+      </p>
+      <p>
+        {githubUrl ? (
+          <a
+            href={githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline hover:text-slate-900 dark:hover:text-slate-100"
+          >
+            Visit the project on GitHub
+          </a>
+        ) : (
+          <span>Contact details will be published here when available.</span>
+        )}
+      </p>
+    </section>
+  </article>
+</BaseLayout>

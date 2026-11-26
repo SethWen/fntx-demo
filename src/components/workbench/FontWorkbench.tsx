@@ -14,6 +14,7 @@ import {
 import type { ContainerFormat, FontInfoOutput, TtcInfoOutput } from '@/vendor/fntx-wasm/index';
 import { translations, type Lang } from '../../i18n/translations';
 import { fntxClient, type EngineStatus } from '../../lib/fntx-client';
+import { friendlyError } from '../../lib/error-utils';
 import { formatBytes } from '../../lib/format-utils';
 import { ConvertPanel } from './ConvertPanel';
 import { InspectPanel } from './InspectPanel';
@@ -33,13 +34,21 @@ interface ActiveFont {
 
 interface FontWorkbenchProps {
   lang: Lang;
+  initialTab?: TabKey;
+  syncTab?: boolean;
 }
 
-export function FontWorkbench({ lang }: FontWorkbenchProps) {
+const TAB_KEYS: TabKey[] = ['inspect', 'subset', 'convert', 'ttc'];
+
+export function FontWorkbench({
+  lang,
+  initialTab = 'inspect',
+  syncTab = false,
+}: FontWorkbenchProps) {
   const t = translations[lang].workbench;
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [activeTab, setActiveTab] = useState<TabKey>('inspect');
+  const [activeTab, setActiveTab] = useState<TabKey>(initialTab);
   const [engineStatus, setEngineStatus] = useState<EngineStatus>(() => fntxClient.getStatus());
   const [dragging, setDragging] = useState(false);
 
@@ -49,6 +58,25 @@ export function FontWorkbench({ lang }: FontWorkbenchProps) {
   useEffect(() => {
     return fntxClient.subscribeStatus(setEngineStatus);
   }, []);
+
+  useEffect(() => {
+    if (!syncTab) return;
+    const requested = new URLSearchParams(window.location.search).get('tab');
+    if (requested && TAB_KEYS.includes(requested as TabKey)) {
+      setActiveTab(requested as TabKey);
+    }
+  }, [syncTab]);
+
+  useEffect(() => {
+    if (!syncTab) return;
+    const url = new URL(window.location.href);
+    if (activeTab === 'inspect') {
+      url.searchParams.delete('tab');
+    } else {
+      url.searchParams.set('tab', activeTab);
+    }
+    window.history.replaceState(null, '', url);
+  }, [activeTab, syncTab]);
 
   const loadFontBytes = async (name: string, data: Uint8Array, nextTab?: TabKey) => {
     setError('');
@@ -75,7 +103,7 @@ export function FontWorkbench({ lang }: FontWorkbenchProps) {
       }
     } catch (err) {
       setActiveFile(null);
-      setError(err instanceof Error ? err.message : String(err));
+      setError(friendlyError(err, lang));
     }
   };
 
@@ -133,6 +161,7 @@ export function FontWorkbench({ lang }: FontWorkbenchProps) {
 
   return (
     <section className="qv-glass mx-auto max-w-5xl rounded-2xl border border-violet-950/10 p-5 sm:p-6 dark:border-violet-400/15">
+      <h2 className="sr-only">{t.heading}</h2>
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap gap-1.5 rounded-xl border border-violet-950/10 bg-white/45 p-1 backdrop-blur-md dark:border-violet-400/15 dark:bg-[#1b1734]/45">
           {tabs.map((tab) => {

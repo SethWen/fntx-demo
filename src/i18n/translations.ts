@@ -1,7 +1,23 @@
 export type Lang = 'zh' | 'en';
 
+export interface SeoCopy {
+  title: string;
+  description: string;
+}
+
+export interface FeatureCopy {
+  title: string;
+  body: string;
+}
+
+export interface StepCopy {
+  title: string;
+  body: string;
+}
+
 export interface Translations {
   siteName: string;
+  siteBadge: string;
   tagline: string;
   nav: {
     workbench: string;
@@ -16,7 +32,26 @@ export interface Translations {
     title: string;
     subtitle: string;
   };
+  home: {
+    workbenchHeading: string;
+    featuresTitle: string;
+    features: FeatureCopy[];
+    stepsTitle: string;
+    steps: StepCopy[];
+  };
+  seo: {
+    home: SeoCopy;
+    subset: SeoCopy;
+    convert: SeoCopy;
+    ttc: SeoCopy;
+    formats: SeoCopy;
+    guide: SeoCopy;
+    glossary: SeoCopy;
+    about: SeoCopy;
+    privacy: SeoCopy;
+  };
   workbench: {
+    heading: string;
     tabs: {
       inspect: string;
       subset: string;
@@ -52,6 +87,7 @@ export interface Translations {
       truetype: string;
       cff: string;
       fileSize: string;
+      advancedParams: string;
     };
     subset: {
       title: string;
@@ -66,6 +102,8 @@ export interface Translations {
       fontNameLabel: string;
       fontNamePlaceholder: string;
       formatsLabel: string;
+      formatsHint: string;
+      advancedOptions: string;
       dropHinting: string;
       legacyTableStrip: string;
       strictMode: string;
@@ -84,6 +122,7 @@ export interface Translations {
     convert: {
       title: string;
       targetFormat: string;
+      formatsHint: string;
       currentFormatTag: string;
       cffUnsupportedHint: string;
       ttcNotice: string;
@@ -127,298 +166,517 @@ export interface Translations {
   };
   ad: {
     label: string;
-    placeholder: string;
+  };
+  breadcrumb: {
+    home: string;
   };
   footer: {
     localOnly: string;
     copyright: string;
+    groups: {
+      tools: string;
+      learn: string;
+      about: string;
+    };
+    links: {
+      home: string;
+      subset: string;
+      convert: string;
+      ttc: string;
+      formats: string;
+      guide: string;
+      glossary: string;
+      about: string;
+      privacy: string;
+    };
   };
 }
 
 export const translations: Record<Lang, Translations> = {
   zh: {
     siteName: 'fntx Web',
-    tagline: '纯前端 WASM 字体子集化与格式转换引擎',
+    siteBadge: '本地处理',
+    tagline: '在线字体工具箱：瘦身、转换、合并，全程本地完成',
     nav: {
       workbench: '工作台',
-      formats: '格式科普',
+      formats: '字体格式',
       guide: '使用指南',
       privacy: '隐私政策',
       switchLang: 'English',
       themeToggle: '切换亮暗主题',
     },
     hero: {
-      badge: '100% 浏览器本地处理 · 零上传',
-      title: '高性能在线字体子集化与格式转换',
+      badge: '全程本地处理 · 文件不上传',
+      title: '在线字体瘦身与格式转换',
       subtitle:
-        '基于 Rust 与 WebAssembly 驱动，直接在浏览器内完成字体体检、按需裁剪、多源合并、TTF/WOFF2/OTF/EOT/SVG 互转及 TTC 拆装。',
+        '把几十 MB 的大字库压到几十 KB，网页加载更快；常用格式一键互转；一个合集拆成单文件，或多个字体打包成一个。文件不出电脑。',
+    },
+    home: {
+      workbenchHeading: '在线字体处理工作台',
+      featuresTitle: '能帮你做什么',
+      features: [
+        {
+          title: '让中文字体变小',
+          body: '只保留网页实际用到的字。具体能小多少取决于用字量，通常可以从几十 MB 降到几十 KB。',
+        },
+        {
+          title: '一键换格式',
+          body: 'TTF、OTF、WOFF2 等常用格式互相转换，做网页优先选 WOFF2。',
+        },
+        {
+          title: '拆开或打包字体合集',
+          body: '一个文件里装着好几套字体，可以拆成单个；多个字体也能打包成一个。',
+        },
+      ],
+      stepsTitle: '三步搞定',
+      steps: [
+        {
+          title: '拖入字体',
+          body: '把 TTF、OTF、WOFF、WOFF2 或 TTC 文件拖进上方区域。',
+        },
+        {
+          title: '选择操作',
+          body: '瘦身、换格式或拆装合集，改完可以立即预览效果。',
+        },
+        {
+          title: '下载结果',
+          body: '确认满意后下载新文件，原文件不会被改动。',
+        },
+      ],
+    },
+    seo: {
+      home: {
+        title: '在线字体工具：字体瘦身与格式转换 - fntx',
+        description:
+          '免费在线给字体瘦身、转换格式：只保留用到的字，中文字库从几十 MB 压到几十 KB；支持 TTF、OTF、WOFF2、TTC，全程本地处理、不上传文件。',
+      },
+      subset: {
+        title: 'CJK 字体子集化工具：只保留网页用到的字 - fntx',
+        description:
+          '在线给中文字体瘦身：粘贴网页用到的文字，只保留需要的字符，导出 WOFF2 或 TTF。支持补充生僻字字库，全程本地处理。',
+      },
+      convert: {
+        title: 'TTF 转 WOFF2、OTF 转 TTF 在线转换 - fntx',
+        description:
+          '在线转换字体格式：TTF、OTF、WOFF、WOFF2、EOT、SVG 互相转换，网页优先 WOFF2，文件不上传。',
+      },
+      ttc: {
+        title: 'TTC 拆分与打包：字体合集处理工具 - fntx',
+        description:
+          '在线拆开或打包 TTC 字体合集：提取单个字体，或把多个字体合并成一个文件，重复数据只存一份。',
+      },
+      glossary: {
+        title: '字体术语词典：子集化、WOFF2、TTC 是什么 - fntx',
+        description:
+          '用大白话解释字体瘦身、WOFF2、TTF、OTF、TTC、Hinting 等常见术语，附对应工具入口。',
+      },
+      about: {
+        title: '关于 fntx Web：为什么做这个字体工具 - fntx',
+        description:
+          '了解 fntx Web 是谁做的、为什么坚持本地处理、如何保证字体文件不上传，以及项目开源与联系方式。',
+      },
+      formats: {
+        title: '字体格式对比：TTF、OTF、WOFF2 怎么选？ - fntx',
+        description:
+          '一张表看懂常见字体格式：WOFF2 为什么适合网页、TTF 和 OTF 有什么区别、TTC 是什么，附选型建议。',
+      },
+      guide: {
+        title: '字体瘦身与格式转换指南（常见问题） - fntx',
+        description:
+          '网页中文字体加载慢？生僻字显示不出来？了解如何在线给字体瘦身、补充生僻字、转换格式、拆分字体合集，以及文件为什么不会被上传。',
+      },
+      privacy: {
+        title: '隐私政策 - fntx',
+        description:
+          'fntx 如何处理你的字体文件和个人信息：所有处理都在浏览器本地完成，字体不会上传。',
+      },
     },
     workbench: {
+      heading: '在线字体处理工作台',
       tabs: {
         inspect: '字体体检',
-        subset: '子集化 / 合并',
+        subset: '字体瘦身',
         convert: '格式转换',
-        ttc: 'TTC 集合',
+        ttc: '字体合集',
       },
       engine: {
-        idle: '引擎待命（首次处理自动加载）',
-        loading: '正在加载 WASM 引擎...',
-        ready: 'WASM 引擎就绪',
-        error: '引擎加载失败',
+        idle: '准备就绪（首次使用会自动加载）',
+        loading: '正在准备，请稍候…',
+        ready: '准备好了，可以开始',
+        error: '处理程序加载失败，请刷新重试',
       },
       dropzone: {
-        title: '拖拽字体文件到此处，或点击选择',
-        subtitle: '支持 .ttf / .otf / .woff / .woff2 / .eot / .ttc，所有计算仅在本地内存运行',
+        title: '把字体文件拖到这里，或点击选择',
+        subtitle:
+          '支持 TTF、OTF、WOFF、WOFF2、EOT、TTC。所有处理都在你的浏览器里完成，文件不会上传。',
         loaded: '当前字体',
         replace: '更换字体',
         clear: '清除',
-        sampleHint: '提示：加载后可在上方各功能标签间无缝切换，无需重复上传',
+        sampleHint: '提示：切换上面的功能不需要重新上传',
       },
       inspect: {
-        empty: '请先上传一个单字体文件（TTF/OTF/WOFF/WOFF2/EOT）查看元数据。',
-        containerFormat: '容器格式',
-        ttcNotice: '当前文件为 TTC 字体集合，请前往「TTC 集合」拆解出单个字体后再进行体检或处理。',
-        goToTtc: '前往 TTC 集合',
-        unsupportedNotice: '当前文件格式不支持元数据体检（SVG 仅支持作为输出格式）。',
-        familyName: '家族名称 (Family)',
-        postscriptName: 'PostScript 名称',
-        unitsPerEm: 'UPM (Units Per Em)',
-        glyphCount: '字形总数 (Glyphs)',
-        codepointCount: 'Unicode 码点数',
-        outlineType: '轮廓类型',
-        truetype: 'TrueType (二次贝塞尔)',
-        cff: 'CFF / OpenType (三次贝塞尔)',
-        fileSize: '文件体积',
+        empty: '先拖入一个字体文件，就能看到它的信息。',
+        containerFormat: '文件格式',
+        ttcNotice: '这是一个字体合集文件，请先到「字体合集」里选一个字体出来。',
+        goToTtc: '前往字体合集',
+        unsupportedNotice: '这个文件无法查看字体信息（SVG 只能作为输出格式）。',
+        familyName: '字体名称',
+        postscriptName: '字体英文名（PostScript）',
+        unitsPerEm: '设计单位（UPM）',
+        glyphCount: '字形数量',
+        codepointCount: '收录字符数',
+        outlineType: '字形类型',
+        truetype: '标准字形（TrueType）',
+        cff: '印刷字形（CFF）',
+        fileSize: '文件大小',
+        advancedParams: '高级参数',
       },
       subset: {
-        title: '按需提取字符子集（支持多源扩展区合并）',
-        cffWarning:
-          '当前字体为 CFF 轮廓（OTF），暂不支持子集化（仅支持 TrueType 轮廓），可前往格式转换生成 TTF / WOFF / WOFF2 / SVG。',
+        title: '只保留你要用的字',
+        cffWarning: '这个字体暂时不能瘦身（目前仅支持 TTF 类型）。可以先去「格式转换」转成 TTF。',
         goToConvert: '前往格式转换',
-        ttcNotice: '当前文件为 TTC 字体集合，请先在「TTC 集合」提取单个 TrueType 字体。',
-        goToTtc: '前往 TTC 集合',
-        unsupportedNotice: '当前文件格式不支持子集化构建。',
-        extraSourceInvalid:
-          '补充字体源必须是 TrueType (glyf) 单字体（支持 TTF / WOFF / WOFF2 / EOT）。',
-        textLabel: '输入需要保留的字符',
+        ttcNotice: '这是一个字体合集文件，请先在「字体合集」里选一个字体出来。',
+        goToTtc: '前往字体合集',
+        unsupportedNotice: '这个文件暂时不能瘦身。',
+        extraSourceInvalid: '补充字库需要是 TTF、WOFF、WOFF2 或 EOT 格式的单字体文件。',
+        textLabel: '要保留的文字',
         textPlaceholder: '例如：你好世界 fntx 0123456789 𠀀',
-        fontNameLabel: '输出字体名称（可选）',
-        fontNamePlaceholder: '留空则沿用原字体名',
+        fontNameLabel: '新字体名称（可选）',
+        fontNamePlaceholder: '留空就沿用原字体名',
         formatsLabel: '输出格式',
-        dropHinting: '剔除 Hinting 提示指令（减小体积）',
-        legacyTableStrip: '精简冗余布局表',
-        strictMode: '严格模式（遇缺字报错）',
-        extraSourcesTitle: '额外补充字体源（可选，用于 BMP + SIP 生僻字合并）',
-        extraSourcesDesc: '主字体默认覆盖 0x00000 - 0x0FFFF，可按 Unicode 区间追加补充字库',
-        addSource: '添加补充字体源',
-        rangeStart: '起始码点 (Hex)',
-        rangeEnd: '结束码点 (Hex)',
-        run: '开始构建子集',
-        running: '正在子集化...',
-        coverage: '字符覆盖率',
-        missingCodepoints: '缺失码点',
-        noneMissing: '无缺失字符',
+        formatsHint: '做网页选 WOFF2，装到电脑或 App 选 TTF。',
+        advancedOptions: '高级选项',
+        dropHinting: '更彻底压缩（省略字体微调细节）',
+        legacyTableStrip: '省略多余数据',
+        strictMode: '缺字时提醒我',
+        extraSourcesTitle: '补充生僻字字库（可选）',
+        extraSourcesDesc: '主字体通常已包含常用汉字；需要生僻字时，可以再加一个字库文件。',
+        addSource: '添加字库',
+        rangeStart: '起始范围',
+        rangeEnd: '结束范围',
+        run: '开始瘦身',
+        running: '正在处理…',
+        coverage: '收录情况',
+        missingCodepoints: '缺少的字',
+        noneMissing: '需要的字都在里面',
         download: '下载',
       },
       convert: {
-        title: '单字体格式互转',
-        targetFormat: '目标格式',
+        title: '把字体换成另一种格式',
+        targetFormat: '想换成',
+        formatsHint: '做网页选 WOFF2；装到电脑或 App 选 TTF；印刷设计选 OTF。',
         currentFormatTag: '当前',
-        cffUnsupportedHint:
-          '当前字体为 CFF 轮廓（OTF），暂不支持直接转换为 EOT（可先转为 TTF，或输出 WOFF / WOFF2 / SVG）。',
-        ttcNotice: '当前文件为 TTC 字体集合，请先在「TTC 集合」提取单个字体后再转换格式。',
-        goToTtc: '前往 TTC 集合',
-        unsupportedNotice: '当前文件格式不支持转换。',
+        cffUnsupportedHint: '这个字体不能直接转成 EOT。可以先转成 TTF，或者选择 WOFF、WOFF2、SVG。',
+        ttcNotice: '这是一个字体合集文件，请先在「字体合集」里选一个字体出来。',
+        goToTtc: '前往字体合集',
+        unsupportedNotice: '这个文件暂时不能转换格式。',
         run: '开始转换',
-        running: '正在转换...',
-        originalSize: '原始体积',
-        outputSize: '输出体积',
+        running: '正在转换…',
+        originalSize: '原文件',
+        outputSize: '新文件',
         ratio: '体积变化',
-        download: '下载转换结果',
+        download: '下载新字体',
       },
       ttc: {
-        title: 'TTC 字体集合拆解与打包',
-        unpackMode: '拆解 TTC (.ttc -> .ttf/.otf)',
-        packMode: '打包 TTC (多字体 -> .ttc)',
+        title: '字体合集：拆开或打包',
+        unpackMode: '拆开合集',
+        packMode: '打包合集',
         unpackDesc:
-          '上传 .ttc 文件自动解析内部子字体与表去重统计，可提取下载或直接送入工作台处理。',
-        unpackNotTtc: '当前加载的不是 TTC 集合文件；你可以切换到「打包 TTC」将其加入集合。',
-        packDesc:
-          '选择 2 个及以上单字体文件（TTF / OTF / WOFF / WOFF2 / EOT），自动去重共享表并打包为 .ttc。',
-        inspectBtn: '解析 TTC 结构',
-        unpackAllBtn: '全部拆解提取',
+          '有些字体文件里装着好几套字体。这里可以把它们拆成单个字体，也可以先看看里面都有什么。',
+        unpackNotTtc: '当前文件不是字体合集。想把它打包进合集，请切换到「打包合集」。',
+        packDesc: '选两个或更多字体文件，打包成一个字体合集，重复的数据只存一份。',
+        inspectBtn: '看看里面有什么',
+        unpackAllBtn: '全部拆开',
         unpackOneBtn: '提取',
-        useFaceBtn: '设为当前字体',
-        packAddCurrent: '加入当前加载的字体',
-        packAddFiles: '添加多个单字体文件 (.ttf / .otf / .woff / .woff2 / .eot)',
-        packBtn: '打包为 TTC',
-        version: '容器版本',
-        fontCount: '子字体数量',
-        sharedTables: '共享表数量',
-        totalTables: '总表数',
-        uniqueTables: '唯一表数',
+        useFaceBtn: '用此字体继续处理',
+        packAddCurrent: '加入当前字体',
+        packAddFiles: '添加字体文件',
+        packBtn: '打包成一个文件',
+        version: '格式版本',
+        fontCount: '包含字体数',
+        sharedTables: '共享数据项',
+        totalTables: '数据项总数',
+        uniqueTables: '独立数据项',
         download: '下载',
       },
       preview: {
-        title: '即时渲染预览',
-        placeholder: '在这里输入任意文字，实时预览处理后字体的渲染效果…… 0123456789 ABCabc',
+        title: '预览效果',
+        placeholder: '在这里输入文字，看看字体长什么样… 0123456789 ABCabc',
         sizeLabel: '字号',
-        loading: '正在加载预览字体...',
-        unsupported: '当前格式（如 EOT/SVG）浏览器 FontFace 不支持直接预览，请下载后使用。',
+        loading: '正在准备预览…',
+        unsupported: '这个格式无法在网页里直接预览，请下载后查看。',
       },
     },
     ad: {
       label: '赞助与广告位',
-      placeholder: '广告位预留（部署并配置 PUBLIC_ADSENSE_CLIENT 后自动展示）',
+    },
+    breadcrumb: {
+      home: '首页',
     },
     footer: {
-      localOnly: '所有字体均在本地浏览器 WebAssembly 沙箱中处理，绝不上传至任何服务器。',
-      copyright: '基于 fntx 引擎构建',
+      localOnly: '所有处理都在你的浏览器里完成，字体不会上传。',
+      copyright: '由 fntx 提供支持',
+      groups: {
+        tools: '工具',
+        learn: '了解字体',
+        about: '关于',
+      },
+      links: {
+        home: '字体工作台',
+        subset: '字体瘦身',
+        convert: '格式转换',
+        ttc: '字体合集',
+        formats: '字体格式对比',
+        guide: '使用指南',
+        glossary: '字体术语词典',
+        about: '关于我们',
+        privacy: '隐私政策',
+      },
     },
   },
   en: {
     siteName: 'fntx Web',
-    tagline: 'Client-side WASM Font Subsetter & Format Converter',
+    siteBadge: 'local',
+    tagline: 'Free online font toolkit — shrink, convert, merge',
     nav: {
       workbench: 'Workbench',
-      formats: 'Formats',
+      formats: 'Font Formats',
       guide: 'Guide',
       privacy: 'Privacy',
       switchLang: '中文',
       themeToggle: 'Toggle Light/Dark Theme',
     },
     hero: {
-      badge: '100% Client-Side · Zero Server Upload',
-      title: 'Fast In-Browser Font Subsetting & Conversion',
+      badge: 'Runs locally · Your files never upload',
+      title: 'Online Font Toolkit: Subset & Convert in Your Browser',
       subtitle:
-        'Powered by Rust & WebAssembly. Inspect metadata, subset & merge multi-plane fonts, convert between TTF/WOFF2/OTF/EOT/SVG, and pack/unpack TTC collections locally.',
+        'Cut a 20 MB CJK font down to a few KB. Convert formats, split font collections, or bundle several fonts into one — all in your browser.',
+    },
+    home: {
+      workbenchHeading: 'Online font workbench',
+      featuresTitle: 'What you can do',
+      features: [
+        {
+          title: 'Make CJK fonts smaller',
+          body: 'Keep only the characters your site actually uses. How small it gets depends on the text — often from tens of MB down to tens of KB.',
+        },
+        {
+          title: 'Switch formats in one click',
+          body: 'Convert between TTF, OTF, WOFF2 and more. For websites, WOFF2 is usually the best choice.',
+        },
+        {
+          title: 'Split or bundle font collections',
+          body: 'Pull individual fonts out of one collection file, or pack several fonts into a single file.',
+        },
+      ],
+      stepsTitle: 'Three steps',
+      steps: [
+        {
+          title: 'Drop a font',
+          body: 'Drag a TTF, OTF, WOFF, WOFF2 or TTC file into the area above.',
+        },
+        {
+          title: 'Pick an action',
+          body: 'Shrink it, convert it, or split/pack a collection — preview the result right away.',
+        },
+        {
+          title: 'Download the result',
+          body: 'Download the new file when it looks right. Your original file stays untouched.',
+        },
+      ],
+    },
+    seo: {
+      home: {
+        title: 'Online Font Toolkit: Subset, Convert & Merge | fntx',
+        description:
+          'Shrink CJK fonts to only the characters you need and convert between TTF, OTF, WOFF2, WOFF, EOT, SVG, and TTC. Free and fully in-browser — files never upload.',
+      },
+      subset: {
+        title: 'CJK Font Subsetter: Keep Only the Characters You Need | fntx',
+        description:
+          'Shrink CJK fonts online: paste the text your site uses, keep only those characters, and export WOFF2 or TTF. Add a rare-character font when needed — all in your browser.',
+      },
+      convert: {
+        title: 'TTF to WOFF2, OTF to TTF Converter Online | fntx',
+        description:
+          'Convert font formats online: TTF, OTF, WOFF, WOFF2, EOT and SVG. Use WOFF2 for the web. Files never upload.',
+      },
+      ttc: {
+        title: 'TTC Extractor & Font Collection Packer | fntx',
+        description:
+          'Split a TTC font collection into individual fonts, or pack several fonts into one file with shared data stored once — right in your browser.',
+      },
+      glossary: {
+        title: 'Font Glossary: Subsetting, WOFF2, TTC & More | fntx',
+        description:
+          'Plain-language definitions of font subsetting, WOFF2, TTF, OTF, TTC, hinting and other terms, with links to the matching tool.',
+      },
+      about: {
+        title: 'About fntx Web — Why We Built This Font Tool | fntx',
+        description:
+          'Who builds fntx Web, why it runs entirely in your browser, how your font files stay private, and how to get in touch.',
+      },
+      formats: {
+        title: 'Font Formats Explained: TTF vs OTF vs WOFF2 vs TTC | fntx',
+        description:
+          'Compare TTF, OTF, WOFF, WOFF2, EOT, SVG and TTC — what each format is for, and which one keeps your web fonts smallest.',
+      },
+      guide: {
+        title: 'Font Subsetting & Conversion Guide — FAQ | fntx',
+        description:
+          'Learn how to shrink CJK fonts for the web, add rare characters, convert formats, and split font collections — plus why your files never leave your browser.',
+      },
+      privacy: {
+        title: 'Privacy Policy | fntx',
+        description:
+          'How fntx handles your fonts and personal data: everything runs locally in your browser, and your font files are never uploaded.',
+      },
     },
     workbench: {
+      heading: 'Online font workbench',
       tabs: {
         inspect: 'Inspect',
-        subset: 'Subset / Merge',
+        subset: 'Shrink Font',
         convert: 'Convert',
-        ttc: 'TTC Tools',
+        ttc: 'Collections',
       },
       engine: {
-        idle: 'Engine idle (loads on first task)',
-        loading: 'Loading WASM engine...',
-        ready: 'WASM engine ready',
-        error: 'Engine failed to load',
+        idle: 'Ready (loads automatically on first use)',
+        loading: 'Getting ready, please wait…',
+        ready: 'Ready to go',
+        error: 'Could not load the processing module. Please refresh and try again.',
       },
       dropzone: {
         title: 'Drop a font file here, or click to browse',
         subtitle:
-          'Supports .ttf / .otf / .woff / .woff2 / .eot / .ttc. Processed strictly in local memory.',
-        loaded: 'Active Font',
+          'Supports TTF, OTF, WOFF, WOFF2, EOT and TTC. Everything runs in your browser — files never upload.',
+        loaded: 'Current font',
         replace: 'Replace',
         clear: 'Clear',
-        sampleHint: 'Tip: Switch tabs above freely without re-uploading your font.',
+        sampleHint: 'Tip: switch tools above without uploading again',
       },
       inspect: {
-        empty: 'Upload a single font file (TTF/OTF/WOFF/WOFF2/EOT) to inspect its metadata.',
-        containerFormat: 'Container Format',
-        ttcNotice: 'This file is a TTC collection. Open TTC Tools to unpack a face first.',
-        goToTtc: 'Go to TTC Tools',
-        unsupportedNotice:
-          'Metadata inspection is not supported for this format (SVG is output-only).',
-        familyName: 'Family Name',
-        postscriptName: 'PostScript Name',
-        unitsPerEm: 'Units Per Em (UPM)',
-        glyphCount: 'Glyph Count',
-        codepointCount: 'Unicode Codepoints',
-        outlineType: 'Outline Format',
-        truetype: 'TrueType (Quadratic Bézier)',
-        cff: 'CFF / OpenType (Cubic Bézier)',
-        fileSize: 'File Size',
+        empty: 'Drop a font file to see what is inside it.',
+        containerFormat: 'File format',
+        ttcNotice:
+          'This is a font collection. Open Collections first and pick a single font from it.',
+        goToTtc: 'Go to Collections',
+        unsupportedNotice: 'Font details are not available for this file (SVG is output-only).',
+        familyName: 'Font name',
+        postscriptName: 'PostScript name',
+        unitsPerEm: 'Design units (UPM)',
+        glyphCount: 'Glyph count',
+        codepointCount: 'Characters included',
+        outlineType: 'Outline type',
+        truetype: 'TrueType outlines',
+        cff: 'CFF (print) outlines',
+        fileSize: 'File size',
+        advancedParams: 'Advanced details',
       },
       subset: {
-        title: 'Subset Characters (with optional multi-source merge)',
-        cffWarning:
-          'CFF (OTF) outlines are not supported for subsetting yet (TrueType only). You can convert to TTF / WOFF / WOFF2 / SVG instead.',
+        title: 'Keep only the characters you need',
+        cffWarning: 'This font cannot be shrunk yet (TrueType only). Convert it to TTF first.',
         goToConvert: 'Go to Convert',
-        ttcNotice:
-          'This file is a TTC collection. Unpack a single TrueType face in TTC Tools first.',
-        goToTtc: 'Go to TTC Tools',
-        unsupportedNotice: 'This file format is not supported for subsetting.',
+        ttcNotice: 'This is a font collection. Pick a single font in Collections first.',
+        goToTtc: 'Go to Collections',
+        unsupportedNotice: 'This file cannot be shrunk yet.',
         extraSourceInvalid:
-          'Additional source must be a TrueType (glyf) single font (TTF / WOFF / WOFF2 / EOT).',
+          'The extra font must be a single TrueType font (TTF, WOFF, WOFF2 or EOT).',
         textLabel: 'Characters to keep',
         textPlaceholder: 'e.g. Hello World 你好世界 0123456789 𠀀',
-        fontNameLabel: 'Custom Font Name (optional)',
-        fontNamePlaceholder: 'Leave empty to keep original name',
-        formatsLabel: 'Output Formats',
-        dropHinting: 'Drop hinting instructions (smaller size)',
-        legacyTableStrip: 'Strip redundant layout tables',
-        strictMode: 'Strict mode (fail on missing codepoints)',
-        extraSourcesTitle: 'Additional Font Sources (optional, for BMP + SIP merge)',
+        fontNameLabel: 'New font name (optional)',
+        fontNamePlaceholder: 'Leave empty to keep the original name',
+        formatsLabel: 'Output formats',
+        formatsHint: 'WOFF2 for websites; TTF for installing on a computer or in an app.',
+        advancedOptions: 'Advanced options',
+        dropHinting: 'Compress harder (skip fine-tuning hints)',
+        legacyTableStrip: 'Drop extra data',
+        strictMode: 'Warn me about missing characters',
+        extraSourcesTitle: 'Add a font for rare characters (optional)',
         extraSourcesDesc:
-          'Primary font defaults to 0x00000 - 0x0FFFF. Add supplementary fonts by Unicode range.',
-        addSource: 'Add Source',
-        rangeStart: 'Start (Hex)',
-        rangeEnd: 'End (Hex)',
-        run: 'Build Subset',
-        running: 'Subsetting...',
-        coverage: 'Coverage',
-        missingCodepoints: 'Missing Codepoints',
-        noneMissing: 'None missing',
+          'Most fonts already cover common characters. Add another font file only when you need rare ones.',
+        addSource: 'Add font',
+        rangeStart: 'Start range',
+        rangeEnd: 'End range',
+        run: 'Shrink font',
+        running: 'Working…',
+        coverage: 'Characters included',
+        missingCodepoints: 'Missing characters',
+        noneMissing: 'Everything you need is included',
         download: 'Download',
       },
       convert: {
-        title: 'Font Format Conversion',
-        targetFormat: 'Target Format',
-        currentFormatTag: 'Current',
+        title: 'Turn this font into another format',
+        targetFormat: 'Convert to',
+        formatsHint: 'WOFF2 for websites, TTF for desktop/apps, OTF for print design.',
+        currentFormatTag: 'current',
         cffUnsupportedHint:
-          'CFF (OTF) outlines cannot be converted directly to EOT (convert to TTF first, or export WOFF / WOFF2 / SVG).',
-        ttcNotice: 'This file is a TTC collection. Unpack a single face in TTC Tools first.',
-        goToTtc: 'Go to TTC Tools',
-        unsupportedNotice: 'This file format is not supported for conversion.',
-        run: 'Convert Font',
-        running: 'Converting...',
-        originalSize: 'Original Size',
-        outputSize: 'Output Size',
-        ratio: 'Size Change',
-        download: 'Download Output',
+          'This font cannot be converted to EOT directly. Convert it to TTF first, or choose WOFF, WOFF2 or SVG.',
+        ttcNotice: 'This is a font collection. Pick a single font in Collections first.',
+        goToTtc: 'Go to Collections',
+        unsupportedNotice: 'This file cannot be converted right now.',
+        run: 'Convert font',
+        running: 'Converting…',
+        originalSize: 'Original',
+        outputSize: 'New file',
+        ratio: 'Size change',
+        download: 'Download new font',
       },
       ttc: {
-        title: 'TTC Collection Unpack & Pack',
-        unpackMode: 'Unpack TTC (.ttc -> .ttf/.otf)',
-        packMode: 'Pack TTC (Fonts -> .ttc)',
+        title: 'Font collections: split or bundle',
+        unpackMode: 'Split collection',
+        packMode: 'Bundle fonts',
         unpackDesc:
-          'Inspect a .ttc collection automatically, extract faces, or load any face into the workbench.',
-        unpackNotTtc: 'Current file is not a TTC collection. Switch to Pack TTC to include it.',
-        packDesc:
-          'Select 2 or more single font files (TTF / OTF / WOFF / WOFF2 / EOT) to pack into a .ttc.',
-        inspectBtn: 'Inspect TTC',
-        unpackAllBtn: 'Unpack All Faces',
+          'Some font files contain several fonts. Split them into individual fonts here, or take a look inside first.',
+        unpackNotTtc: 'This file is not a collection. To add it to one, switch to “Bundle fonts”.',
+        packDesc: 'Choose two or more font files to pack them into one collection file.',
+        inspectBtn: 'See what is inside',
+        unpackAllBtn: 'Split all',
         unpackOneBtn: 'Extract',
-        useFaceBtn: 'Use in Workbench',
+        useFaceBtn: 'Continue with this font',
         packAddCurrent: 'Add current font',
-        packAddFiles: 'Add font files (.ttf / .otf / .woff / .woff2 / .eot)',
-        packBtn: 'Pack into TTC',
-        version: 'Version',
-        fontCount: 'Face Count',
-        sharedTables: 'Shared Tables',
-        totalTables: 'Total Tables',
-        uniqueTables: 'Unique Tables',
+        packAddFiles: 'Add font files',
+        packBtn: 'Pack into one file',
+        version: 'Format version',
+        fontCount: 'Fonts included',
+        sharedTables: 'Shared data items',
+        totalTables: 'Total data items',
+        uniqueTables: 'Unique data items',
         download: 'Download',
       },
       preview: {
-        title: 'Live Font Preview',
-        placeholder: 'Type here to preview the processed font in real time... 0123456789 ABCabc',
+        title: 'Preview',
+        placeholder: 'Type here to see what the font looks like… 0123456789 ABCabc',
         sizeLabel: 'Size',
-        loading: 'Loading preview font...',
-        unsupported: 'Browser FontFace preview is unavailable for this format (e.g. EOT/SVG).',
+        loading: 'Preparing preview…',
+        unsupported: 'This format cannot be previewed in a browser. Please download it to view.',
       },
     },
     ad: {
-      label: 'Advertisement',
-      placeholder: 'Ad slot reserved (set PUBLIC_ADSENSE_CLIENT to activate)',
+      label: 'Sponsored',
+    },
+    breadcrumb: {
+      home: 'Home',
     },
     footer: {
-      localOnly:
-        'All fonts are processed locally in your browser WebAssembly sandbox and never uploaded.',
+      localOnly: 'Everything runs in your browser. Your font files never upload.',
       copyright: 'Powered by fntx',
+      groups: {
+        tools: 'Tools',
+        learn: 'Learn',
+        about: 'About',
+      },
+      links: {
+        home: 'Font workbench',
+        subset: 'Shrink fonts',
+        convert: 'Convert formats',
+        ttc: 'Font collections',
+        formats: 'Font format comparison',
+        guide: 'Guide & FAQ',
+        glossary: 'Font glossary',
+        about: 'About',
+        privacy: 'Privacy',
+      },
     },
   },
 };
