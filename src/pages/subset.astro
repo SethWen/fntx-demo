@@ -1,0 +1,144 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { FontWorkbench } from '../components/workbench/FontWorkbench';
+import { translations } from '../i18n/translations';
+
+const t = translations.en;
+const url = 'https://fntx.modone.me/subset/';
+const homeUrl = 'https://fntx.modone.me/';
+const webappId = 'https://fntx.modone.me/#webapp';
+
+const faqs = [
+  {
+    question: 'Does subsetting change how the letters look?',
+    answer:
+      'No. Subsetting only removes characters you do not use. The characters you keep keep their original shapes. Preview the result before publishing it.',
+  },
+  {
+    question: 'How much smaller will the font be?',
+    answer:
+      'It depends on how many characters you keep. A CJK font of tens of megabytes often drops to tens of kilobytes when only one page’s text is kept.',
+  },
+  {
+    question: 'What if a rare character is missing from the main font?',
+    answer:
+      'Open Advanced options, add a font that contains the rare character, and set the range it covers (for example 20000–2FFFF). The tool merges both fonts into one result.',
+  },
+  {
+    question: 'Do I need to paste every word on my site?',
+    answer:
+      'Only the text the page will actually display, such as headings, buttons, navigation and body copy. Include any text generated later, or those characters may be missing from the new font.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: t.seo.subset.title,
+    description: t.seo.subset.description,
+    inLanguage: 'en',
+    isPartOf: { '@id': 'https://fntx.modone.me/#website' },
+    mainEntity: { '@id': webappId },
+    breadcrumb: { '@id': `${url}#breadcrumb` },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: homeUrl },
+      { '@type': 'ListItem', position: 2, name: 'Shrink fonts', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout
+  lang="en"
+  currentPath="subset"
+  title={t.seo.subset.title}
+  description={t.seo.subset.description}
+  jsonLd={jsonLd}
+>
+  <div class="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
+    <Breadcrumbs items={[{ label: t.breadcrumb.home, href: homeUrl }, { label: t.footer.links.subset }]} />
+
+    <header class="mt-4 max-w-3xl space-y-3">
+      <h1 class="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+        CJK Font Subsetter: Keep Only the Characters You Need
+      </h1>
+      <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+        CJK font files are often tens of megabytes, while a single page may use only a few hundred
+        characters. Paste the text you use, and the tool creates a new font containing just those
+        characters. Your files stay on your computer.
+      </p>
+    </header>
+
+    <div class="mt-6">
+      <FontWorkbench client:load lang="en" initialTab="subset" />
+    </div>
+
+    <article class="mx-auto mt-10 max-w-3xl space-y-8 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+      <section class="space-y-3">
+        <h2 class="text-lg font-semibold text-slate-900 dark:text-white">When to use it</h2>
+        <ul class="list-disc space-y-1 pl-5">
+          <li>Your site loads a Chinese font slowly and only needs the characters on the page.</li>
+          <li>You want a brand or heading font on the web without shipping the full library.</li>
+          <li>You are embedding a font in an app or e-book and want a smaller package.</li>
+        </ul>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-lg font-semibold text-slate-900 dark:text-white">How it works</h2>
+        <ol class="list-decimal space-y-1 pl-5">
+          <li>Drop a TTF, OTF, WOFF, WOFF2 or collection file into the workbench above.</li>
+          <li>Paste the text the page will use under “Characters to keep”.</li>
+          <li>Choose WOFF2 for the web, and TTF too if you also need an installable copy.</li>
+          <li>Click “Shrink font”, preview the result, then download.</li>
+        </ol>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-lg font-semibold text-slate-900 dark:text-white">FAQ</h2>
+        {faqs.map((faq) => (
+          <div class="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900/60">
+            <h3 class="text-sm font-semibold text-slate-900 dark:text-white">{faq.question}</h3>
+            <p class="mt-1.5 text-xs">{faq.answer}</p>
+          </div>
+        ))}
+      </section>
+
+      <section class="space-y-2">
+        <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Related tools</h2>
+        <p>
+          Need a different format? Use the{' '}
+          <a href="/convert/" class="underline hover:text-slate-900 dark:hover:text-slate-100">format converter</a>.
+          Starting from a collection? Split it in{' '}
+          <a href="/ttc/" class="underline hover:text-slate-900 dark:hover:text-slate-100">Collections</a>.
+          Not sure which format fits? See the{' '}
+          <a href="/formats/" class="underline hover:text-slate-900 dark:hover:text-slate-100">font format comparison</a>.
+        </p>
+        <p class="text-xs text-slate-500">
+          Font files carry their own licenses. Please confirm you are allowed to subset and
+          redistribute a font before publishing the result.
+        </p>
+      </section>
+    </article>
+
+    <AdSlot lang="en" slotId="subset-bottom-en" />
+  </div>
+</BaseLayout>

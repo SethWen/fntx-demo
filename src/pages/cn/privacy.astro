@@ -1,28 +1,81 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { translations } from '../../i18n/translations';
+
+const t = translations.zh;
+const githubUrl = import.meta.env.PUBLIC_GITHUB_URL;
+const homeUrl = 'https://fntx.modone.me/cn/';
 ---
 
 <BaseLayout
   lang="zh"
   currentPath="privacy"
-  title="隐私政策 - fntx Web"
-  description="fntx Web 隐私政策：所有字体处理均在浏览器本地 WebAssembly 中完成，不收集或上传任何字体文件。"
+  title={t.seo.privacy.title}
+  description={t.seo.privacy.description}
 >
-  <article class="mx-auto max-w-3xl space-y-5 px-4 py-10 text-sm leading-relaxed text-slate-600 sm:px-6 dark:text-slate-400">
-    <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">隐私政策</h1>
-    <p>
-      <strong>fntx Web</strong> 是一款纯前端静态网页应用。我们高度重视您的文件安全与个人隐私：
-    </p>
-    <ul class="list-disc space-y-2 pl-5">
-      <li>
-        <strong>零文件上传：</strong>您拖入或选择的任何字体文件（TTF/OTF/WOFF/WOFF2/EOT/TTC）仅在您本地浏览器的内存与 WebAssembly 沙箱中读取和处理，绝不会通过网络发送至我们的服务器或任何第三方服务器。
-      </li>
-      <li>
-        <strong>本地偏好存储：</strong>本应用仅使用浏览器 <code>localStorage</code> 保存您的界面语言（中文/英文）和亮暗主题偏好，不用于追踪用户身份。
-      </li>
-      <li>
-        <strong>第三方广告与统计（如启用）：</strong>若本站未来接入 Google AdSense 等第三方广告服务，第三方服务商可能会依据其隐私政策使用 Cookie 来展示相关广告。您可以通过浏览器的隐私设置管理或禁用 Cookie。
-      </li>
-    </ul>
+  <article class="mx-auto max-w-3xl space-y-6 px-4 py-10 text-sm leading-relaxed text-slate-600 sm:px-6 dark:text-slate-400">
+    <Breadcrumbs items={[{ label: t.breadcrumb.home, href: homeUrl }, { label: t.footer.links.privacy }]} />
+
+    <header class="space-y-2">
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+        隐私政策：你的字体只留在你的电脑里
+      </h1>
+      <p class="text-xs text-slate-500">最后更新：2026 年 11 月 26 日</p>
+    </header>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">一句话总结</h2>
+      <p>
+        字体文件不会被上传，全部在你自己的浏览器里打开和处理。我们只会在你的设备上记住主题和语言偏好。
+      </p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">你的字体文件</h2>
+      <p>
+        把字体拖进工作台后，文件会被读入浏览器内存并在本机处理，生成的新文件也在本机完成。关闭或刷新页面后，这些数据就会被清空。我们不会收到、保存或查看你的字体。
+      </p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">本机保存的设置</h2>
+      <p>
+        我们只用浏览器的 <code>localStorage</code> 保存两项偏好：亮暗主题和界面语言。这些值留在你的设备上，不包含身份信息。你可以随时在浏览器设置里清除。
+      </p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">访问日志</h2>
+      <p>
+        和大多数网站一样，托管服务商可能会记录常规访问日志，例如 IP 地址、访问时间和请求的页面，用于安全和稳定性排查。这些日志不包含你的字体文件。
+      </p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">广告与统计</h2>
+      <p>
+        本站目前没有使用广告或统计 Cookie。如果将来接入广告（例如 Google AdSense），我们会先征求同意，第三方服务商可能会依据其自身政策使用 Cookie；届时会提前更新本页。
+      </p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">我们不会做的事</h2>
+      <p>不需要注册账号，不买卖个人数据，也不会拿你的字体去训练任何模型。</p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">联系我们</h2>
+      <p>
+        对本政策有疑问？
+        {githubUrl ? (
+          <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="underline hover:text-slate-900 dark:hover:text-slate-100">
+            在 GitHub 上提问
+          </a>
+        ) : (
+          <span>可通过页脚提供的联系方式联系我们。</span>
+        )}
+      </p>
+    </section>
   </article>
 </BaseLayout>

@@ -6,35 +6,47 @@ import { translations } from '../../i18n/translations';
 
 const lang = 'zh';
 const t = translations[lang];
+const githubUrl = import.meta.env.PUBLIC_GITHUB_URL;
+const homeUrl = 'https://fntx.modone.me/cn/';
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
-  name: `${t.siteName} - ${t.tagline}`,
-  url: 'https://fntx.modone.me/cn/',
-  description: t.hero.subtitle,
+  '@id': `${homeUrl}#webapp`,
+  name: t.siteName,
+  alternateName: 'fntx',
+  url: homeUrl,
+  description: t.seo.home.description,
   applicationCategory: 'UtilitiesApplication',
   operatingSystem: 'Any',
   browserRequirements: 'Requires WebAssembly and Web Workers',
+  isAccessibleForFree: true,
+  screenshot: 'https://fntx.modone.me/og/workbench-zh.png',
   inLanguage: 'zh-CN',
+  featureList: t.home.features.map((feature) => feature.title),
   offers: {
     '@type': 'Offer',
     price: '0',
     priceCurrency: 'USD',
   },
+  ...(githubUrl ? { sameAs: [githubUrl] } : {}),
 };
 ---
 
 <BaseLayout
   lang={lang}
   currentPath="workbench"
-  title={`${t.siteName} - ${t.tagline}`}
-  description={t.hero.subtitle}
+  title={t.seo.home.title}
+  description={t.seo.home.description}
   jsonLd={jsonLd}
 >
   <div class="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
     <div class="mx-auto mb-7 flex max-w-5xl flex-wrap items-end justify-between gap-4">
       <div>
+        <p class="mb-2 inline-flex items-center gap-1.5 rounded-full border border-violet-950/10 bg-white/60 px-2.5 py-1 text-[11px] font-medium text-violet-700 dark:border-violet-400/20 dark:bg-violet-400/10 dark:text-violet-300">
+          <span class="h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden="true"></span>
+          {t.hero.badge}
+        </p>
         <h1 class="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
           {t.hero.title}
         </h1>
@@ -51,29 +63,51 @@ const jsonLd = {
       </div>
     </div>
 
-    <FontWorkbench client:load lang={lang} />
+    <FontWorkbench client:load lang={lang} syncTab />
 
     <AdSlot lang={lang} slotId="home-bottom" />
 
-    <section class="mx-auto mt-10 grid max-w-5xl gap-4 sm:grid-cols-3">
-      <div class="qv-glass-card rounded-2xl border border-violet-950/10 p-5 dark:border-violet-400/15">
-        <h2 class="text-sm font-semibold text-slate-900 dark:text-white">多源子集化与合并</h2>
-        <p class="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
-          支持 BMP 基本区与 SIP 扩展区字库按 Unicode 区间独立裁剪并自动合并，精确统计缺失码点。
-        </p>
+    <section class="mx-auto mt-10 max-w-5xl">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white">{t.home.featuresTitle}</h2>
+      <div class="mt-4 grid gap-4 sm:grid-cols-3">
+        {t.home.features.map((feature) => (
+          <div class="qv-glass-card rounded-2xl border border-violet-950/10 p-5 dark:border-violet-400/15">
+            <h3 class="text-sm font-semibold text-slate-900 dark:text-white">{feature.title}</h3>
+            <p class="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
+              {feature.body}
+            </p>
+          </div>
+        ))}
       </div>
-      <div class="qv-glass-card rounded-2xl border border-violet-950/10 p-5 dark:border-violet-400/15">
-        <h2 class="text-sm font-semibold text-slate-900 dark:text-white">全格式本地互转</h2>
-        <p class="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
-          支持 TTF、WOFF2、WOFF、OTF（TrueType 提升为 CFF 三次贝塞尔）、EOT 与 SVG 一键转换。
-        </p>
-      </div>
-      <div class="qv-glass-card rounded-2xl border border-violet-950/10 p-5 dark:border-violet-400/15">
-        <h2 class="text-sm font-semibold text-slate-900 dark:text-white">TTC 集合无损拆装</h2>
-        <p class="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
-          可视化查看 TTC 容器表共享统计，支持单字形或全量拆解为独立 SFNT，以及多字体表去重打包。
-        </p>
-      </div>
+      <nav aria-label="工具说明" class="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
+        <a href="/cn/subset/" class="underline hover:text-slate-700 dark:hover:text-slate-200">字体瘦身</a>
+        <a href="/cn/convert/" class="underline hover:text-slate-700 dark:hover:text-slate-200">格式转换</a>
+        <a href="/cn/ttc/" class="underline hover:text-slate-700 dark:hover:text-slate-200">拆分或打包合集</a>
+        <a href="/cn/glossary/" class="underline hover:text-slate-700 dark:hover:text-slate-200">字体术语词典</a>
+      </nav>
+    </section>
+
+    <section class="mx-auto mt-10 max-w-5xl">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white">{t.home.stepsTitle}</h2>
+      <ol class="mt-4 grid gap-4 sm:grid-cols-3">
+        {t.home.steps.map((step, index) => (
+          <li class="qv-glass-card rounded-2xl border border-violet-950/10 p-5 dark:border-violet-400/15">
+            <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-violet-500/12 text-xs font-semibold text-violet-700 dark:bg-violet-400/15 dark:text-violet-300">
+              {index + 1}
+            </span>
+            <h3 class="mt-2 text-sm font-semibold text-slate-900 dark:text-white">{step.title}</h3>
+            <p class="mt-1 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
+              {step.body}
+            </p>
+          </li>
+        ))}
+      </ol>
+      <p class="mt-4 text-xs text-slate-500 dark:text-slate-400">
+        不知道选哪个格式？先看
+        <a href="/cn/formats/" class="underline hover:text-slate-700 dark:hover:text-slate-200">字体格式对比</a>
+        ，或阅读
+        <a href="/cn/guide/" class="underline hover:text-slate-700 dark:hover:text-slate-200">使用指南</a>。
+      </p>
     </section>
   </div>
 </BaseLayout>

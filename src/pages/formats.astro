@@ -1,70 +1,194 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import AdSlot from '../components/AdSlot.astro';
+import { translations } from '../i18n/translations';
+
+const t = translations.en;
+const url = 'https://fntx.modone.me/formats/';
+const homeUrl = 'https://fntx.modone.me/';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'TechArticle',
+    '@id': `${url}#article`,
+    headline: 'Which Font Format Should You Use?',
+    description: t.seo.formats.description,
+    url,
+    inLanguage: 'en',
+    datePublished: '2026-11-26',
+    dateModified: '2026-11-26',
+    author: { '@id': 'https://fntx.modone.me/#organization' },
+    mainEntityOfPage: { '@id': `${url}#webpage` },
+    isPartOf: { '@id': 'https://fntx.modone.me/#website' },
+    about: [
+      { '@type': 'Thing', name: 'WOFF2' },
+      { '@type': 'Thing', name: 'TTF' },
+      { '@type': 'Thing', name: 'OTF' },
+      { '@type': 'Thing', name: 'TrueType Collection' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: homeUrl },
+      { '@type': 'ListItem', position: 2, name: 'Font formats', item: url },
+    ],
+  },
+];
 ---
 
 <BaseLayout
   lang="en"
   currentPath="formats"
-  title="Font Formats Explained: TTF, WOFF2, OTF, EOT, SVG & TTC - fntx Web"
-  description="Compare web and desktop font formats (TTF, WOFF2, WOFF, OTF, EOT, SVG, TTC) by compression, outline curves, and best use cases."
+  title={t.seo.formats.title}
+  description={t.seo.formats.description}
+  jsonLd={jsonLd}
 >
-  <article class="mx-auto max-w-4xl space-y-6 px-4 py-10 sm:px-6">
-    <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">Font Formats Comparison & Selection Guide</h1>
-    <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-      Choosing the right font format and subsetting strategy dramatically reduces payload sizes — CJK fonts can often be reduced from 20 MB down to tens of kilobytes.
-    </p>
+  <article class="mx-auto max-w-4xl space-y-8 px-4 py-10 text-slate-600 sm:px-6 dark:text-slate-400">
+    <Breadcrumbs items={[{ label: t.breadcrumb.home, href: homeUrl }, { label: t.footer.links.formats }]} />
+
+    <header class="space-y-3">
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+        Which Font Format Should You Use?
+      </h1>
+      <p class="text-sm leading-relaxed">
+        Font files come in several formats, and picking the wrong one makes a page heavier than it
+        needs to be. Here is the short version: for websites use <strong>WOFF2</strong>, for
+        installing on a computer or inside an app use <strong>TTF</strong>, for print design use{' '}
+        <strong>OTF</strong>, and when one file contains several fonts it is usually a{' '}
+        <strong>TTC</strong>.
+      </p>
+    </header>
 
     <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/60">
       <table class="w-full text-left text-xs sm:text-sm">
         <thead class="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
           <tr>
-            <th class="px-4 py-3 font-semibold">Format</th>
-            <th class="px-4 py-3 font-semibold">Compression</th>
-            <th class="px-4 py-3 font-semibold">Primary Use Case</th>
-            <th class="px-4 py-3 font-semibold">Recommendation</th>
+            <th class="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">Format</th>
+            <th class="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">In plain words</th>
+            <th class="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">Best for</th>
+            <th class="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">Our advice</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
           <tr>
             <td class="px-4 py-3 font-mono font-semibold">WOFF2</td>
-            <td class="px-4 py-3">Brotli + Table Transform</td>
-            <td class="px-4 py-3">Modern Web @font-face</td>
-            <td class="px-4 py-3 text-emerald-600 dark:text-emerald-400">Best for Web</td>
+            <td class="px-4 py-3">A font compressed for websites — usually the smallest download.</td>
+            <td class="px-4 py-3">Modern websites</td>
+            <td class="px-4 py-3 text-emerald-600 dark:text-emerald-400">First choice for web</td>
           </tr>
           <tr>
             <td class="px-4 py-3 font-mono font-semibold">WOFF</td>
-            <td class="px-4 py-3">zlib / DEFLATE</td>
-            <td class="px-4 py-3">Legacy browser fallback</td>
+            <td class="px-4 py-3">The older web format; the same idea, but larger than WOFF2.</td>
+            <td class="px-4 py-3">Older browsers</td>
             <td class="px-4 py-3">Fallback only</td>
           </tr>
           <tr>
             <td class="px-4 py-3 font-mono font-semibold">TTF</td>
-            <td class="px-4 py-3">Uncompressed SFNT</td>
-            <td class="px-4 py-3">Desktop OS, mobile apps, source fonts</td>
-            <td class="px-4 py-3">Universal native format</td>
+            <td class="px-4 py-3">The standard, uncompressed font file.</td>
+            <td class="px-4 py-3">Installing on computers, apps, editing</td>
+            <td class="px-4 py-3">Everyday universal format</td>
           </tr>
           <tr>
             <td class="px-4 py-3 font-mono font-semibold">OTF</td>
-            <td class="px-4 py-3">CFF Cubic Bézier</td>
-            <td class="px-4 py-3">Print & professional typography</td>
-            <td class="px-4 py-3">fntx supports TTF ↔ OTF conversion</td>
+            <td class="px-4 py-3">A print-oriented font with a different outline style.</td>
+            <td class="px-4 py-3">Professional design and print</td>
+            <td class="px-4 py-3">Use for print; convert for web</td>
           </tr>
           <tr>
             <td class="px-4 py-3 font-mono font-semibold">TTC</td>
-            <td class="px-4 py-3">Shared table container</td>
-            <td class="px-4 py-3">Bundling font families together</td>
-            <td class="px-4 py-3">Unpack/pack with TTC Tools</td>
+            <td class="px-4 py-3">One file that holds several fonts and shares their data.</td>
+            <td class="px-4 py-3">Font families that ship together</td>
+            <td class="px-4 py-3">Split or pack with Collections</td>
           </tr>
           <tr>
             <td class="px-4 py-3 font-mono font-semibold">EOT / SVG</td>
-            <td class="px-4 py-3">Legacy web formats</td>
-            <td class="px-4 py-3">Old IE / legacy systems</td>
-            <td class="px-4 py-3">Legacy support only</td>
+            <td class="px-4 py-3">Legacy web formats for very old browsers.</td>
+            <td class="px-4 py-3">Old IE and legacy systems</td>
+            <td class="px-4 py-3">Rarely needed today</td>
           </tr>
         </tbody>
       </table>
     </div>
+
+    <section class="space-y-3">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white">
+        WOFF2 vs TTF: what is the difference?
+      </h2>
+      <p class="text-sm leading-relaxed">
+        TTF is the original, uncompressed font file. It works almost everywhere, which makes it a
+        good master copy. WOFF2 contains the same letter shapes, but the file is packed more
+        tightly for download, so browsers unpack it after receiving it.
+      </p>
+      <p class="text-sm leading-relaxed">
+        If a font is for a website, use WOFF2. If it is for a desktop program, an app, or you want to
+        edit the font later, keep TTF. You do not need to choose one forever — the{' '}
+        <a href="/convert/" class="underline hover:text-slate-900 dark:hover:text-slate-100">format converter</a>{' '}
+        can switch between them.
+      </p>
+    </section>
+
+    <section class="space-y-3">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white">TTF or OTF — which is better?</h2>
+      <p class="text-sm leading-relaxed">
+        Neither is simply "better". TTF uses one way of drawing curves; OTF often uses another that
+        is common in professional print fonts. Most websites only need TTF or WOFF2, while design
+        and print workflows often start with OTF.
+      </p>
+      <p class="text-sm leading-relaxed">
+        One practical difference: this workbench can shrink TTF-style fonts, but OTF fonts with CFF
+        outlines need to be converted to TTF first. When in doubt, keep the original and make a copy
+        for the web.
+      </p>
+    </section>
+
+    <section class="space-y-3">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white">
+        What is a TTC font collection?
+      </h2>
+      <p class="text-sm leading-relaxed">
+        TTC stands for TrueType Collection. Instead of several separate files, a TTC packs multiple
+        fonts into one and stores shared data only once. System fonts such as a regular and a bold
+        family are sometimes distributed this way. If you need just one font from the collection,{' '}
+        <a href="/ttc/" class="underline hover:text-slate-900 dark:hover:text-slate-100">split it first</a>; if
+        you want to ship several fonts together, a collection can save space.
+      </p>
+    </section>
+
+    <section class="space-y-3">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white">
+        Do you still need EOT or SVG fonts?
+      </h2>
+      <p class="text-sm leading-relaxed">
+        Not for modern websites. EOT was used by very old versions of Internet Explorer, and SVG
+        fonts were an early workaround for mobile browsers. Both are kept here for legacy projects,
+        but new sites should use WOFF2 with a WOFF fallback only if needed.
+      </p>
+    </section>
+
+    <aside class="rounded-2xl border border-violet-950/10 bg-violet-500/5 p-5 text-sm dark:border-violet-400/15">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">Quick pick</h2>
+      <ul class="mt-2 list-disc space-y-1 pl-5">
+        <li>Website → WOFF2</li>
+        <li>Desktop install, app, or source file → TTF</li>
+        <li>Print design → OTF</li>
+        <li>Several fonts in one file → TTC</li>
+      </ul>
+      <p class="mt-3 text-xs">
+        Font files carry their own licenses. Please make sure you are allowed to subset, convert, or
+        redistribute a font before using the result.
+      </p>
+    </aside>
+
+    <p class="text-sm">
+      Want to try it? Open the{' '}
+      <a href="/" class="underline hover:text-slate-900 dark:hover:text-slate-100">font workbench</a>, or read the{' '}
+      <a href="/guide/" class="underline hover:text-slate-900 dark:hover:text-slate-100">step-by-step guide</a>.
+    </p>
 
     <AdSlot lang="en" slotId="formats-bottom-en" />
   </article>

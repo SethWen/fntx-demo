@@ -1,28 +1,96 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { translations } from '../i18n/translations';
+
+const t = translations.en;
+const githubUrl = import.meta.env.PUBLIC_GITHUB_URL;
+const homeUrl = 'https://fntx.modone.me/';
 ---
 
 <BaseLayout
   lang="en"
   currentPath="privacy"
-  title="Privacy Policy - fntx Web"
-  description="Privacy Policy for fntx Web: all font files are processed locally via WebAssembly in your browser and never uploaded."
+  title={t.seo.privacy.title}
+  description={t.seo.privacy.description}
 >
-  <article class="mx-auto max-w-3xl space-y-5 px-4 py-10 text-sm leading-relaxed text-slate-600 sm:px-6 dark:text-slate-400">
-    <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">Privacy Policy</h1>
-    <p>
-      <strong>fntx Web</strong> is a 100% client-side static web application. Your font files and privacy remain strictly under your control:
-    </p>
-    <ul class="list-disc space-y-2 pl-5">
-      <li>
-        <strong>Zero Server Uploads:</strong> Every font file you open is processed exclusively inside your browser's local memory and WebAssembly sandbox. No font data is ever transmitted to our servers or third parties.
-      </li>
-      <li>
-        <strong>Local Preferences:</strong> We only use browser <code>localStorage</code> to remember your language and light/dark theme selection.
-      </li>
-      <li>
-        <strong>Third-Party Advertising (if enabled):</strong> If third-party ad networks such as Google AdSense are enabled, those providers may use cookies in accordance with their own privacy policies to serve relevant ads. You may manage or disable cookies via your browser settings.
-      </li>
-    </ul>
+  <article class="mx-auto max-w-3xl space-y-6 px-4 py-10 text-sm leading-relaxed text-slate-600 sm:px-6 dark:text-slate-400">
+    <Breadcrumbs items={[{ label: t.breadcrumb.home, href: homeUrl }, { label: t.footer.links.privacy }]} />
+
+    <header class="space-y-2">
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+        Privacy Policy: Your Fonts Stay on Your Computer
+      </h1>
+      <p class="text-xs text-slate-500">Last updated: November 26, 2026</p>
+    </header>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">The short version</h2>
+      <p>
+        Your font files are never uploaded. They are opened and processed inside your own browser.
+        We only remember your theme and language choice on your device.
+      </p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">Your font files</h2>
+      <p>
+        When you drop a font into the workbench, it is read into your browser’s memory and handled
+        there. Generated files are created on your device too. Closing or refreshing the page clears
+        this data. We do not receive, store, or inspect your fonts.
+      </p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">
+        Settings saved on your device
+      </h2>
+      <p>
+        We use browser <code>localStorage</code> for two preferences: light/dark theme and interface
+        language. These values stay on your device and contain no personal identity information. You
+        can clear them at any time in your browser settings.
+      </p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">Hosting logs</h2>
+      <p>
+        Like most websites, our hosting provider may keep standard access logs such as IP address,
+        time, and page requested for security and reliability. These logs do not contain your font
+        files.
+      </p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">Ads and analytics</h2>
+      <p>
+        The site does not currently use advertising or analytics cookies. If advertising (for
+        example Google AdSense) is enabled in the future, we will ask for consent first, and those
+        providers may use cookies under their own policies. This page will be updated before that
+        happens.
+      </p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">What we do not do</h2>
+      <p>
+        We do not require an account, do not sell personal data, and do not use your fonts to train
+        anything.
+      </p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">Contact</h2>
+      <p>
+        Questions about this policy?
+        {githubUrl ? (
+          <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="underline hover:text-slate-900 dark:hover:text-slate-100">
+            Open an issue on GitHub
+          </a>
+        ) : (
+          <span>Use the contact link in the site footer when available.</span>
+        )}
+      </p>
+    </section>
   </article>
 </BaseLayout>

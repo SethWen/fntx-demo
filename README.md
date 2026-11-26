@@ -1,6 +1,6 @@
 <div align="center">
   <img src="./public/favicon.svg" width="72" height="72" alt="fntx logo" />
-  <h1>fntx Web</h1>
+  <h1>Fntx Web</h1>
   <p><strong>Pure Client-Side · Zero Server Uploads · WebAssembly-Powered Font Workbench</strong></p>
   <p>
     Live Demo: <a href="https://fntx.modone.me/"><strong>https://fntx.modone.me/</strong></a>
@@ -11,7 +11,7 @@
   </p>
 </div>
 
-**fntx Web** is a browser-based online font processing workbench powered by the [`fntx`](<>) Rust engine. All font parsing, subsetting, merging, and format conversion run strictly inside your browser's local **WebAssembly + Web Worker** sandbox—never uploading multi-megabyte font files to any server, delivering both high speed and complete privacy.
+**Fntx Web** is a browser-based online font processing workbench powered by the [`fntx`](<>) Rust engine. All font parsing, subsetting, merging, and format conversion run strictly inside your browser's local **WebAssembly + Web Worker** sandbox—never uploading multi-megabyte font files to any server, delivering both high speed and complete privacy.
 
 ---
 

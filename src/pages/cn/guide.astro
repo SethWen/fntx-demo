@@ -1,69 +1,151 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import AdSlot from '../../components/AdSlot.astro';
+import { translations } from '../../i18n/translations';
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
+const t = translations.zh;
+const url = 'https://fntx.modone.me/cn/guide/';
+const homeUrl = 'https://fntx.modone.me/cn/';
+
+const faqs = [
+  {
+    question: '网页加载中文字体太慢，怎么办？',
+    answer:
+      '把字体瘦身，只保留页面用到的字。拖入字体，选「字体瘦身」，粘贴文字，输出格式选 WOFF2，然后下载。能小多少取决于保留多少字，通常可以从几十 MB 降到几十 KB。',
+  },
+  {
+    question: '生僻字显示成方框，怎么补？',
+    answer:
+      '这些字通常放在另一个字库文件里。加载主字体后，在「字体瘦身」里展开「高级选项」，添加包含生僻字的字库，设置范围（例如 20000–2FFFF），再开始瘦身。',
+  },
+  {
+    question: '怎么把字体换成网页用的格式？',
+    answer:
+      '打开「格式转换」，选 WOFF2，下载新文件。如果以后还要安装或修改字体，再保留一份 TTF。',
+  },
+  {
+    question: '一个字体文件里有很多字体，怎么拆出来？',
+    answer:
+      '这种文件叫字体合集（TTC）。打开「字体合集」，选「拆开合集」，提取需要的那套字体，也可以直接用它继续处理。',
+  },
+  {
+    question: '多个字体能合成一个文件吗？',
+    answer:
+      '可以。打开「字体合集」，切到「打包合集」，添加两个或更多字体文件后打包，重复的数据只保存一次。',
+  },
+  {
+    question: '字体文件会被上传吗？',
+    answer:
+      '不会。所有处理都在你的浏览器里完成，字体只留在你的设备上，不会发送到服务器。',
+  },
+  {
+    question: '支持哪些字体格式？',
+    answer:
+      '可以打开 TTF、OTF、WOFF、WOFF2、EOT 和 TTC 文件；可以输出 WOFF2、TTF、OTF、WOFF、EOT 和 SVG。',
+  },
+  {
+    question: '为什么有些字体不能瘦身？',
+    answer:
+      '目前只能给 TTF 类型的字体瘦身。采用 CFF 轮廓的 OTF 需要先转成 TTF：打开「格式转换」，选择 TTF 即可。',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': `${url}#faq`,
+    mainEntity: faqs.map((faq) => ({
       '@type': 'Question',
-      name: '如何对超大中文字库做网页按需裁剪？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: '在工作台上传源字体（如 15MB~30MB 的 .ttf），切换到「子集化 / 合并」标签页，粘贴网页实际用到的文字，勾选 WOFF2 输出格式与「剔除 Hinting」，点击构建即可在几百毫秒内导出极简字体并直接在线预览。',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    '@id': `${url}#howto`,
+    name: '如何给网页用的字体瘦身',
+    description: '只保留网页实际用到的字，在浏览器内下载更小的 WOFF2 文件。',
+    totalTime: 'PT5M',
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: '打开字体工作台',
+        text: '进入工作台，把字体文件拖进页面。',
+        url: homeUrl,
       },
-    },
-    {
-      '@type': 'Question',
-      name: '如何合并基本区（BMP）与生僻字扩展区（SIP）字库？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: '主字体默认负责 00000 - 0FFFF（BMP 平面）。点击「添加补充字体源」，上传扩展区字体并设置区间 20000 - 2FFFF，引擎会自动按码点路由裁剪并合并为单一字体。',
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: '选择字体瘦身',
+        text: '切到「字体瘦身」，粘贴网页实际会显示的文字。',
+        url: `${homeUrl}?tab=subset`,
       },
-    },
-    {
-      '@type': 'Question',
-      name: '文件会上传到服务器吗？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: '完全不会。所有运算都在浏览器本地的 WebAssembly（Web Worker）沙箱内执行，断网状态下（页面已加载后）同样可以完成处理。',
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: '选 WOFF2 并下载',
+        text: '输出格式选择 WOFF2，开始处理，然后下载新文件。',
+        url: `${homeUrl}?tab=subset`,
       },
-    },
-  ],
-};
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '首页', item: homeUrl },
+      { '@type': 'ListItem', position: 2, name: '使用指南', item: url },
+    ],
+  },
+];
 ---
 
 <BaseLayout
   lang="zh"
   currentPath="guide"
-  title="使用指南与常见问题 - fntx Web"
-  description="了解如何在浏览器中使用 fntx Web 进行中文字体子集化、BMP/SIP 多源合并、WOFF2 转换与 TTC 拆装。"
+  title={t.seo.guide.title}
+  description={t.seo.guide.description}
   jsonLd={jsonLd}
 >
   <article class="mx-auto max-w-4xl space-y-6 px-4 py-10 sm:px-6">
-    <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">使用指南与常见问题 (FAQ)</h1>
+    <Breadcrumbs items={[{ label: t.breadcrumb.home, href: homeUrl }, { label: t.footer.links.guide }]} />
 
-    <section class="space-y-3 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900/60">
-      <h2 class="text-lg font-semibold">1. 如何对超大中文字库做网页按需裁剪？</h2>
+    <header class="space-y-3">
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+        使用指南：字体瘦身、格式转换与常见问题
+      </h1>
       <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-        在工作台上传你的源字体（例如 15MB~30MB 的 <code>.ttf</code>），切换到「子集化 / 合并」标签页，粘贴网页实际用到的文字，勾选 <code>WOFF2</code> 输出格式与「剔除 Hinting」，点击构建即可在几百毫秒内导出极简字体并直接在线预览。
+        从网页字体加载慢，到拆分字体合集，这里用最常见的问法给出简短答案。所有操作都在你的浏览器里完成。
       </p>
-    </section>
+      <nav aria-label="相关工具" class="flex flex-wrap gap-2 pt-1 text-xs font-medium">
+        <a href="/cn/subset/" class="rounded-lg border border-slate-200 px-2.5 py-1.5 text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+          字体瘦身
+        </a>
+        <a href="/cn/convert/" class="rounded-lg border border-slate-200 px-2.5 py-1.5 text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+          格式转换
+        </a>
+        <a href="/cn/ttc/" class="rounded-lg border border-slate-200 px-2.5 py-1.5 text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+          字体合集
+        </a>
+      </nav>
+    </header>
 
-    <section class="space-y-3 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900/60">
-      <h2 class="text-lg font-semibold">2. 如何合并基本区（BMP）与生僻字扩展区（SIP）字库？</h2>
-      <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-        主字体默认负责 <code>00000 - 0FFFF</code>（BMP 平面）。点击「添加补充字体源」，上传扩展区字体（如 P2 扩展字库）并设置区间 <code>20000 - 2FFFF</code>，引擎会自动按码点路由裁剪并合并为单一字体。
-      </p>
-    </section>
+    {faqs.map((faq) => (
+      <section class="space-y-3 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900/60">
+        <h2 class="text-lg font-semibold text-slate-900 dark:text-white">{faq.question}</h2>
+        <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">{faq.answer}</p>
+      </section>
+    ))}
 
-    <section class="space-y-3 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900/60">
-      <h2 class="text-lg font-semibold">3. 文件会上传到服务器吗？</h2>
-      <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-        完全不会。所有运算都在你浏览器本地的 WebAssembly（Web Worker）沙箱内执行，断网状态下（页面已加载后）同样可以完成处理。
-      </p>
-    </section>
+    <p class="text-xs text-slate-500 dark:text-slate-400">
+      字体文件自带授权条款。瘦身、转换或再分发之前，请先确认你有相应使用权。想了解各格式的差别，可以看
+      <a href="/cn/formats/" class="underline hover:text-slate-700 dark:hover:text-slate-200">字体格式对比</a>。
+    </p>
 
     <AdSlot lang="zh" slotId="guide-bottom" />
   </article>

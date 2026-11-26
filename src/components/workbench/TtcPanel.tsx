@@ -12,6 +12,7 @@ import {
 import type { ContainerFormat, TtcInfoOutput } from '@/vendor/fntx-wasm/index';
 import { translations, type Lang } from '../../i18n/translations';
 import { fntxClient } from '../../lib/fntx-client';
+import { friendlyError } from '../../lib/error-utils';
 import { downloadBytes, formatBytes, stripExtension } from '../../lib/format-utils';
 
 interface TtcPanelProps {
@@ -81,7 +82,7 @@ export function TtcPanel({
       setTtcInfoState({ source: activeFileData, info });
       setUnpackedState(null);
     } catch (err) {
-      onError(err instanceof Error ? err.message : String(err));
+      onError(friendlyError(err, lang));
     } finally {
       setBusy(false);
     }
@@ -95,7 +96,7 @@ export function TtcPanel({
       const faces = await fntxClient.unpackTtc(activeFileData);
       setUnpackedState({ source: activeFileData, faces });
     } catch (err) {
-      onError(err instanceof Error ? err.message : String(err));
+      onError(friendlyError(err, lang));
     } finally {
       setBusy(false);
     }
@@ -110,7 +111,7 @@ export function TtcPanel({
       const ext = isTruetype ? 'ttf' : 'otf';
       downloadBytes(face, `${stripExtension(activeFileName)}-${index}.${ext}`);
     } catch (err) {
-      onError(err instanceof Error ? err.message : String(err));
+      onError(friendlyError(err, lang));
     } finally {
       setBusy(false);
     }
@@ -125,7 +126,7 @@ export function TtcPanel({
       const ext = isTruetype ? 'ttf' : 'otf';
       onUseFont(`${stripExtension(activeFileName)}-${index}.${ext}`, face);
     } catch (err) {
-      onError(err instanceof Error ? err.message : String(err));
+      onError(friendlyError(err, lang));
     } finally {
       setBusy(false);
     }
@@ -148,7 +149,7 @@ export function TtcPanel({
       setPackFiles((prev) => [...prev, ...loaded]);
       setPackedTtc(null);
     } catch (err) {
-      onError(err instanceof Error ? err.message : String(err));
+      onError(friendlyError(err, lang));
     }
   };
 
@@ -173,7 +174,7 @@ export function TtcPanel({
       const ttc = await fntxClient.packTtc(packFiles.map((f) => f.data));
       setPackedTtc(ttc);
     } catch (err) {
-      onError(err instanceof Error ? err.message : String(err));
+      onError(friendlyError(err, lang));
     } finally {
       setBusy(false);
     }

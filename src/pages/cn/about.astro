@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { translations } from '../../i18n/translations';
+
+const t = translations.zh;
+const githubUrl = import.meta.env.PUBLIC_GITHUB_URL;
+const url = 'https://fntx.modone.me/cn/about/';
+const homeUrl = 'https://fntx.modone.me/cn/';
+const orgId = 'https://fntx.modone.me/#organization';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: t.seo.about.title,
+    description: t.seo.about.description,
+    inLanguage: 'zh-CN',
+    mainEntity: { '@id': orgId },
+    isPartOf: { '@id': 'https://fntx.modone.me/#website' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '首页', item: homeUrl },
+      { '@type': 'ListItem', position: 2, name: '关于', item: url },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  lang="zh"
+  currentPath="about"
+  title={t.seo.about.title}
+  description={t.seo.about.description}
+  jsonLd={jsonLd}
+>
+  <article class="mx-auto max-w-3xl space-y-6 px-4 py-10 text-sm leading-relaxed text-slate-600 sm:px-6 dark:text-slate-400">
+    <Breadcrumbs items={[{ label: t.breadcrumb.home, href: homeUrl }, { label: t.footer.links.about }]} />
+
+    <header class="space-y-2">
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+        关于 Fntx Web
+      </h1>
+      <p class="text-xs text-slate-500">最后更新：2026 年 11 月 26 日</p>
+    </header>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">为什么做这个工具</h2>
+      <p>
+        字体文件常常比网页需要的部分大得多，格式也让人犯晕。很多在线工具的做法是让你先把文件上传到服务器。对于花钱买的字体或自己定制的字体，这一步很难让人放心。
+      </p>
+      <p>
+        Fntx Web 换了一条路：所有处理都在你的浏览器里完成。瘦身、转换、合并，都不用把字体交给别人。
+      </p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">在这里可以做什么</h2>
+      <ul class="list-disc space-y-1 pl-5">
+        <li>体检字体：名称、格式、字符覆盖范围、文件大小。</li>
+        <li>给字体瘦身：只保留网页实际用到的字。</li>
+        <li>转换格式：TTF、WOFF2、WOFF、OTF、EOT、SVG 互转。</li>
+        <li>处理字体合集（TTC）：拆成单个字体，或把多个字体打成一个。</li>
+      </ul>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">为什么坚持本地处理</h2>
+      <p>
+        字体读进浏览器内存后就在本地处理，不会上传，生成的文件也直接留在你的设备上。这是设计原则，不是某个开关：网站本身没有接收字体文件的服务端接口。
+      </p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">它是怎么工作的</h2>
+      <p>
+        核心处理引擎用 Rust 编写，编译成 WebAssembly，运行在后台的 Web Worker 里，所以处理大字体时页面不会卡住。网站本身是静态页面，打开快、维护也简单。
+      </p>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">需要知道的小限制</h2>
+      <ul class="list-disc space-y-1 pl-5">
+        <li>特别大的中文字体很占内存，手机上使用时建议先关掉其他标签页。</li>
+        <li>转换只换容器，不改设计。字体里原本没有的字，转完也不会有。</li>
+        <li>处理结果取决于原字体，操作前建议保留原始文件的备份。</li>
+        <li>字体授权依然有效。瘦身、转换或再发布之前，请确认授权允许。</li>
+      </ul>
+    </section>
+
+    <section class="space-y-2">
+      <h2 class="text-base font-semibold text-slate-900 dark:text-white">开源与联系</h2>
+      <p>
+        Fntx Web 是一个独立的开源项目，代码、问题反馈和版本记录都在 GitHub 上。发现 bug 或想提建议，去那里最直接。
+      </p>
+      <p>
+        {githubUrl ? (
+          <a
+            href={githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline hover:text-slate-900 dark:hover:text-slate-100"
+          >
+            在 GitHub 上查看项目
+          </a>
+        ) : (
+          <span>联系方式将在可用时公布在这里。</span>
+        )}
+      </p>
+    </section>
+  </article>
+</BaseLayout>

@@ -1,69 +1,155 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import AdSlot from '../components/AdSlot.astro';
+import { translations } from '../i18n/translations';
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
+const t = translations.en;
+const url = 'https://fntx.modone.me/guide/';
+const homeUrl = 'https://fntx.modone.me/';
+
+const faqs = [
+  {
+    question: 'My web page loads Chinese fonts slowly. What can I do?',
+    answer:
+      'Shrink the font to only the characters the page uses. Drop the font into the workbench, choose “Shrink Font”, paste the text, pick WOFF2, and download. How much smaller it gets depends on how many characters you keep — often from tens of MB down to tens of KB.',
+  },
+  {
+    question: 'Some rare characters show up as empty boxes. How do I add them?',
+    answer:
+      'Those characters usually live in a separate font file. Load your main font, open Advanced options in “Shrink Font”, add the font that contains the rare characters, set its range (for example 20000–2FFFF), then build the subset.',
+  },
+  {
+    question: 'How do I turn a font into a web format?',
+    answer:
+      'Open “Convert”, choose WOFF2, and download the new file. Keep a TTF copy if you may need to install or edit the font later.',
+  },
+  {
+    question: 'A font file contains several fonts. How do I take one out?',
+    answer:
+      'That is a font collection (TTC). Open “Collections”, pick “Split collection”, and extract the font you need. You can also continue working with it right away.',
+  },
+  {
+    question: 'Can I pack several fonts into one file?',
+    answer:
+      'Yes. Open “Collections”, switch to “Bundle fonts”, add two or more font files, and pack them. Shared data is stored only once.',
+  },
+  {
+    question: 'Are my font files uploaded anywhere?',
+    answer:
+      'No. Everything runs in your browser. Your fonts stay on your device and are never sent to a server.',
+  },
+  {
+    question: 'Which font formats are supported?',
+    answer:
+      'You can open TTF, OTF, WOFF, WOFF2, EOT and TTC files. Output formats include WOFF2, TTF, OTF, WOFF, EOT and SVG.',
+  },
+  {
+    question: 'Why can’t some fonts be shrunk?',
+    answer:
+      'Shrinking currently works with TTF-style fonts. OTF fonts with CFF outlines need to be converted to TTF first: open “Convert” and choose TTF.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': `${url}#faq`,
+    mainEntity: faqs.map((faq) => ({
       '@type': 'Question',
-      name: 'How do I subset a large CJK font for the web?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Drop your source font (e.g. a 15–30 MB .ttf) into the workbench, switch to Subset / Merge, paste the characters you need, select WOFF2, and click Build. You can preview the output immediately in the browser before downloading.',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    '@id': `${url}#howto`,
+    name: 'How to shrink a font for a web page',
+    description:
+      'Keep only the characters a page uses and download a smaller WOFF2 file, entirely in the browser.',
+    totalTime: 'PT5M',
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Open the font workbench',
+        text: 'Go to the workbench and drop your font file into the page.',
+        url: homeUrl,
       },
-    },
-    {
-      '@type': 'Question',
-      name: 'How do I merge BMP and SIP supplementary fonts?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Your primary font covers 00000 - 0FFFF by default. Click Add Source to attach a supplementary font (e.g. Extension B in 20000 - 2FFFF), and fntx will subset each plane and merge them into one unified font.',
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Choose Shrink font',
+        text: 'Switch to Shrink font and paste the text your page will display.',
+        url: `${homeUrl}?tab=subset`,
       },
-    },
-    {
-      '@type': 'Question',
-      name: 'Are my font files uploaded to any server?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Never. Every operation runs strictly inside a local WebAssembly Web Worker in your browser memory.',
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Pick WOFF2 and download',
+        text: 'Select WOFF2 as the output format, run the task, and download the new file.',
+        url: `${homeUrl}?tab=subset`,
       },
-    },
-  ],
-};
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: homeUrl },
+      { '@type': 'ListItem', position: 2, name: 'Guide', item: url },
+    ],
+  },
+];
 ---
 
 <BaseLayout
   lang="en"
   currentPath="guide"
-  title="User Guide & FAQ - fntx Web"
-  description="Learn how to subset large CJK fonts, merge BMP and SIP planes, convert to WOFF2, and unpack/pack TTC collections locally in your browser."
+  title={t.seo.guide.title}
+  description={t.seo.guide.description}
   jsonLd={jsonLd}
 >
   <article class="mx-auto max-w-4xl space-y-6 px-4 py-10 sm:px-6">
-    <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">User Guide & FAQ</h1>
+    <Breadcrumbs items={[{ label: t.breadcrumb.home, href: homeUrl }, { label: t.footer.links.guide }]} />
 
-    <section class="space-y-3 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900/60">
-      <h2 class="text-lg font-semibold">1. How do I subset a large CJK font for the web?</h2>
+    <header class="space-y-3">
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+        Font Subsetting &amp; Conversion Guide
+      </h1>
       <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-        Drop your source font (e.g. a 15–30 MB <code>.ttf</code>) into the workbench, switch to <strong>Subset / Merge</strong>, paste the characters you need, select <code>WOFF2</code>, and click Build. You can preview the output immediately in the browser before downloading.
+        Short answers to the questions people ask most, from slow-loading CJK fonts to splitting a
+        collection file. Every task happens in your browser.
       </p>
-    </section>
+      <nav aria-label="Related tools" class="flex flex-wrap gap-2 pt-1 text-xs font-medium">
+        <a href="/subset/" class="rounded-lg border border-slate-200 px-2.5 py-1.5 text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+          Shrink font
+        </a>
+        <a href="/convert/" class="rounded-lg border border-slate-200 px-2.5 py-1.5 text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+          Convert formats
+        </a>
+        <a href="/ttc/" class="rounded-lg border border-slate-200 px-2.5 py-1.5 text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+          Collections
+        </a>
+      </nav>
+    </header>
 
-    <section class="space-y-3 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900/60">
-      <h2 class="text-lg font-semibold">2. How do I merge BMP and SIP supplementary fonts?</h2>
-      <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-        Your primary font covers <code>00000 - 0FFFF</code> by default. Click <strong>Add Source</strong> to attach a supplementary font (e.g. Extension B in <code>20000 - 2FFFF</code>), and fntx will subset each plane and merge them into one unified font.
-      </p>
-    </section>
+    {faqs.map((faq) => (
+      <section class="space-y-3 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900/60">
+        <h2 class="text-lg font-semibold text-slate-900 dark:text-white">{faq.question}</h2>
+        <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">{faq.answer}</p>
+      </section>
+    ))}
 
-    <section class="space-y-3 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900/60">
-      <h2 class="text-lg font-semibold">3. Are my font files uploaded to any server?</h2>
-      <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-        Never. Every operation runs strictly inside a local WebAssembly Web Worker in your browser memory.
-      </p>
-    </section>
+    <p class="text-xs text-slate-500 dark:text-slate-400">
+      Font files carry their own licenses. Please make sure you are allowed to subset, convert, or
+      redistribute a font before using the result. See{' '}
+      <a href="/formats/" class="underline hover:text-slate-700 dark:hover:text-slate-200">font format comparison</a>{' '}
+      for which format fits which job.
+    </p>
 
     <AdSlot lang="en" slotId="guide-bottom-en" />
   </article>

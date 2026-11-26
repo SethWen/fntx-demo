@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { FontWorkbench } from '../components/workbench/FontWorkbench';
+import { translations } from '../i18n/translations';
+
+const t = translations.en;
+const url = 'https://fntx.modone.me/ttc/';
+const homeUrl = 'https://fntx.modone.me/';
+const webappId = 'https://fntx.modone.me/#webapp';
+
+const faqs = [
+  {
+    question: 'What is the difference between a TTC and a normal font file?',
+    answer:
+      'A TTC is a font collection: it holds several fonts in one file and stores shared data only once. A normal font file usually contains a single font.',
+  },
+  {
+    question: 'Does splitting change the font?',
+    answer:
+      'No. Splitting simply extracts one font from the collection. Its shapes and layout data stay the same.',
+  },
+  {
+    question: 'Does packing make the file smaller?',
+    answer:
+      'If the fonts share data, packing stores it only once, so the collection can be smaller than the separate files combined. How much depends on how similar the fonts are.',
+  },
+  {
+    question: 'Can I extract only one font from a collection?',
+    answer:
+      'Yes. Inspect the collection to see every face, then extract the one you need — or download all of them at once.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: t.seo.ttc.title,
+    description: t.seo.ttc.description,
+    inLanguage: 'en',
+    isPartOf: { '@id': 'https://fntx.modone.me/#website' },
+    mainEntity: { '@id': webappId },
+    breadcrumb: { '@id': `${url}#breadcrumb` },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: homeUrl },
+      { '@type': 'ListItem', position: 2, name: 'Font collections', item: url },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+    })),
+  },
+];
+---
+
+<BaseLayout
+  lang="en"
+  currentPath="ttc"
+  title={t.seo.ttc.title}
+  description={t.seo.ttc.description}
+  jsonLd={jsonLd}
+>
+  <div class="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
+    <Breadcrumbs items={[{ label: t.breadcrumb.home, href: homeUrl }, { label: t.footer.links.ttc }]} />
+
+    <header class="mt-4 max-w-3xl space-y-3">
+      <h1 class="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+        TTC Extractor &amp; Font Collection Packer
+      </h1>
+      <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+        Some font files contain several fonts — that is a TTC collection. Pull one font out to use
+        on its own, or pack multiple fonts into a single collection with shared data stored only
+        once. Everything happens in your browser.
+      </p>
+    </header>
+
+    <div class="mt-6">
+      <FontWorkbench client:load lang="en" initialTab="ttc" />
+    </div>
+
+    <article class="mx-auto mt-10 max-w-3xl space-y-8 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+      <section class="space-y-3">
+        <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Split a collection</h2>
+        <ol class="list-decimal space-y-1 pl-5">
+          <li>Drop a .ttc file; the workbench switches to Collections automatically.</li>
+          <li>Click “See what is inside” to list the included fonts.</li>
+          <li>Extract the font you need, or choose “Continue with this font” to shrink or convert it.</li>
+        </ol>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Pack a collection</h2>
+        <ol class="list-decimal space-y-1 pl-5">
+          <li>Switch to “Bundle fonts” and add two or more font files.</li>
+          <li>Click “Pack into one file”.</li>
+          <li>Download the resulting .ttc file.</li>
+        </ol>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-lg font-semibold text-slate-900 dark:text-white">FAQ</h2>
+        {faqs.map((faq) => (
+          <div class="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900/60">
+            <h3 class="text-sm font-semibold text-slate-900 dark:text-white">{faq.question}</h3>
+            <p class="mt-1.5 text-xs">{faq.answer}</p>
+          </div>
+        ))}
+      </section>
+
+      <section class="space-y-2">
+        <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Related tools</h2>
+        <p>
+          Extracted font too large? Use{' '}
+          <a href="/subset/" class="underline hover:text-slate-900 dark:hover:text-slate-100">Shrink font</a>.
+          Need a web format? Use{' '}
+          <a href="/convert/" class="underline hover:text-slate-900 dark:hover:text-slate-100">Convert</a>.
+          To compare TTC with other formats, see the{' '}
+          <a href="/formats/" class="underline hover:text-slate-900 dark:hover:text-slate-100">font format comparison</a>.
+        </p>
+        <p class="text-xs text-slate-500">
+          Font files carry their own licenses. Please confirm you are allowed to split, pack and
+          redistribute a font before publishing the result.
+        </p>
+      </section>
+    </article>
+
+    <AdSlot lang="en" slotId="ttc-bottom-en" />
+  </div>
+</BaseLayout>
